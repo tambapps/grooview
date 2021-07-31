@@ -1,14 +1,11 @@
-package com.tambapps.android.grooview.builder;
+package com.tambapps.android.grooview.builder
 
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView
-import com.tambapps.android.grooview.factory.AbstractViewFactory;
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.tambapps.android.grooview.factory.TextViewFactory
-import com.tambapps.android.grooview.factory.ViewFactory;
-import org.codehaus.groovy.runtime.InvokerHelper;
+import com.tambapps.android.grooview.factory.ViewFactory
 
 class ViewBuilder extends FactoryBuilderSupport {
 
@@ -54,45 +51,6 @@ class ViewBuilder extends FactoryBuilderSupport {
     // We're doing nothing on purpose because node attributes should be set by
     // Factories
   }
+  // TODO add Color functions like in groovyfx
 
-  public ViewBuilder textView2(Map<String, ?> properties) {
-    TextView textView = new TextView(context);
-    handleViewParams(textView, properties);
-    Optional<String> optText = getString(properties, "text");
-    optText.ifPresent(textView.&setText);
-    // TODO textSize
-    views.add(textView);
-    return this;
-  }
-
-  private void handleViewParams(View view, Map<String, ?> properties) {
-    // TODO handle int (pixels) and String (dp, sp, ...) for dimensions
-    Optional<Integer> visibility = get(properties, "visibility", Integer.class);
-    visibility.ifPresent(view.&setVisibility);
-    Optional<Closure> clickListener = get(properties, "clickListener", Closure.class);
-    clickListener.ifPresent( {
-      it.setDelegate(view);
-      it.setResolveStrategy(DELEGATE_FIRST)
-      view.setOnClickListener {
-        InvokerHelper.invokeClosure(it, [] as Object[])
-      }
-    });
-
-  }
-
-  private Optional<String> getString(Map<String, ?> properties, String propertyName) {
-    Object o = properties.get(propertyName);
-    return Optional.ofNullable(o).map(Object.&toString);
-  }
-
-  private <T> Optional<T> get(Map<String, ?> properties, String propertyName, Class<T> clazz) {
-    return get(properties.get(propertyName), clazz);
-  }
-
-  private <T> Optional<T> get(Object o, Class<T> clazz) {
-    if (!clazz.isInstance(o)) {
-      return Optional.empty();
-    }
-    return Optional.of((T) o);
-  }
 }
