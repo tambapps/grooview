@@ -2,10 +2,12 @@ package com.tambapps.android.grooview.factory
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.Rect
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.TouchDelegate
@@ -14,6 +16,8 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
+
+import java.nio.file.Path
 
 abstract class AbstractViewFactory extends AbstractFactory {
 
@@ -31,7 +35,6 @@ abstract class AbstractViewFactory extends AbstractFactory {
 
     ObjectPropertySetter setter = new ObjectPropertySetter(view, attributes, builder)
     setter.with {
-      // TODO handle pixel attributes, drawable attributes (handle URL, Files)
       handleProperty("accessibilityDelegate", View.AccessibilityDelegate)
       handleProperty("accessibilityHeading", boolean)
       handleProperty("accessibilityLiveRegion", int)
@@ -45,9 +48,9 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("animationMatrix", Matrix)
       handleProperty("autofillHints", String[])
       //handleProperty("autofillId", android.view.autofill.AutofillId)
-      handleProperty("background", Drawable)
+      handleProperty("background", this.&toDrawable)
       handleProperty("backgroundColor", int)
-      handleProperty("backgroundDrawable", Drawable)
+      handleProperty("backgroundDrawable", this.&toDrawable)
       handleProperty("backgroundResource", int)
       //handleProperty("backgroundTintBlendMode", android.graphics.BlendMode)
       handleProperty("backgroundTintList", ColorStateList)
@@ -77,7 +80,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("focusableInTouchMode", boolean)
       handleProperty("focusedByDefault", boolean)
       handleProperty("forceDarkAllowed", boolean)
-      handleProperty("foreground", Drawable)
+      handleProperty("foreground", this.&toDrawable)
       handleProperty("foregroundGravity", int)
       //handleProperty("foregroundTintBlendMode", android.graphics.BlendMode)
       handleProperty("foregroundTintList", ColorStateList)
@@ -86,8 +89,8 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("hasTransientState", boolean)
       handleProperty("horizontalFadingEdgeEnabled", boolean)
       handleProperty("horizontalScrollBarEnabled", boolean)
-      handleProperty("horizontalScrollbarThumbDrawable", Drawable)
-      handleProperty("horizontalScrollbarTrackDrawable", Drawable)
+      handleProperty("horizontalScrollbarThumbDrawable", this.&toDrawable)
+      handleProperty("horizontalScrollbarTrackDrawable", this.&toDrawable)
       handleProperty("hovered", boolean)
       // TODO handle Strings for ids (use hashcode in the back) and allow to retrieve views by the ids (String given)
       handleProperty("id", int)
@@ -176,8 +179,8 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("verticalFadingEdgeEnabled", boolean)
       handleProperty("verticalScrollBarEnabled", boolean)
       handleProperty("verticalScrollbarPosition", int)
-      handleProperty("verticalScrollbarThumbDrawable", Drawable)
-      handleProperty("verticalScrollbarTrackDrawable", Drawable)
+      handleProperty("verticalScrollbarThumbDrawable", this.&toDrawable)
+      handleProperty("verticalScrollbarTrackDrawable", this.&toDrawable)
       //handleProperty("viewTranslationCallback", android.view.translation.ViewTranslationCallback)
       handleProperty("visibility", Integer)
       handleProperty("willNotCacheDrawing", boolean)
@@ -230,7 +233,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
       case Integer:
         return data
       case String:
-        String number = data.takeWhile {it.isDigit() }
+        String number = data.takeWhile(Character.&isDigit)
         int unit = getComplexUnit(data.substring(number.size()))
         return (int) TypedValue.applyDimension(unit, number.toInteger(), context.resources.displayMetrics)
       default:
@@ -238,6 +241,24 @@ abstract class AbstractViewFactory extends AbstractFactory {
     }
   }
 
+  private Drawable toDrawable(def data) {
+    if (data == null) {
+      return null
+    }
+    switch (data) {
+      case File:
+      case Path:
+        return Drawable.createFromPath(data.toString())
+      case String:
+        // let's assume it's an url
+        def b = data.toURL().withInputStream {
+          BitmapFactory.decodeStream(it)
+        }
+        return new BitmapDrawable(context.resources, b)
+      default:
+        throw new IllegalArgumentException("Cannot convert object of type ${data.class.simpleName} to Drawable")
+    }
+  }
   private static int getComplexUnit(String unit) {
     switch (unit) {
       case 'dp':
