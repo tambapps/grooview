@@ -32,7 +32,6 @@ abstract class AbstractViewFactory extends AbstractFactory {
     ObjectPropertySetter setter = new ObjectPropertySetter(view, attributes, builder)
     setter.with {
       // TODO handle pixel attributes, drawable attributes (handle URL, Files)
-      //  handle margin, marginLeft, top, ... same for paddings
       handleProperty("accessibilityDelegate", View.AccessibilityDelegate)
       handleProperty("accessibilityHeading", boolean)
       handleProperty("accessibilityLiveRegion", int)
@@ -90,6 +89,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("horizontalScrollbarThumbDrawable", Drawable)
       handleProperty("horizontalScrollbarTrackDrawable", Drawable)
       handleProperty("hovered", boolean)
+      // TODO handle Strings for ids (use hashcode in the back) and allow to retrieve views by the ids (String given)
       handleProperty("id", int)
       handleProperty("importantForAccessibility", int)
       handleProperty("importantForAutofill", int)
@@ -146,13 +146,13 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("screenReaderFocusable", boolean)
       handleProperty("scrollBarDefaultDelayBeforeFade", int)
       handleProperty("scrollBarFadeDuration", int)
-      handleProperty("scrollBarSize", int)
-      handleProperty("scrollBarStyle", int)
+      handleProperty("scrollBarSize", this.&toPixels)
+      handleProperty("scrollBarStyle", this.&toPixels)
       //handleProperty("scrollCaptureCallback", android.view.ScrollCaptureCallback)
       handleProperty("scrollCaptureHint", int)
       handleProperty("scrollContainer", boolean)
-      handleProperty("scrollX", int)
-      handleProperty("scrollY", int)
+      handleProperty("scrollX", this.&toPixels)
+      handleProperty("scrollY", this.&toPixels)
       handleProperty("scrollbarFadingEnabled", boolean)
       handleProperty("selected", boolean)
       handleProperty("soundEffectsEnabled", boolean)
@@ -183,10 +183,27 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("willNotCacheDrawing", boolean)
       handleProperty("willNotDraw", boolean)
       //handleProperty("windowInsetsAnimationCallback", android.view.WindowInsetsAnimation.Callback)
-      handleProperty("x", float)
-      handleProperty("y", float)
-      handleProperty("z", float)
+      handleProperty("x", this.&toPixels)
+      handleProperty("y", this.&toPixels)
+      handleProperty("z", this.&toPixels)
 
+      // handling padding
+      def paddings = attributes['padding'] as List
+      if (paddings != null) {
+        if (paddings.size() != 4) {
+          throw new IllegalArgumentException("Padding should have 4 values: left, top, right bottom")
+        }
+        paddings = paddings.collect(this.&toPixels)
+        view.setPadding(*paddings)
+      }
+      def paddingStart = toPixels(attributes['paddingStart'] ?: attributes['paddingLeft'])
+      if (paddingStart) view.setPadding(paddingStart, view.paddingTop, view.paddingEnd, view.paddingBottom)
+      def paddingTop = toPixels(attributes['paddingTop'])
+      if (paddingTop) view.setPadding(view.paddingStart, paddingTop, view.paddingEnd, view.paddingBottom)
+      def paddingEnd = toPixels(attributes['paddingEnd'] ?: attributes['paddingRight'])
+      if (paddingEnd) view.setPadding(view.paddingStart, view.paddingTop, paddingEnd, view.paddingBottom)
+      def paddingBottom = toPixels(attributes['paddingBottom'])
+      if (paddingBottom) view.setPadding(view.paddingStart, view.paddingTop, view.paddingEnd, paddingBottom)
       /*
       TODO what to do about these properties with multiple parameters
       handleProperty("layerType", int, android.graphics.Paint)
@@ -206,6 +223,9 @@ abstract class AbstractViewFactory extends AbstractFactory {
   protected abstract Object newInstance(Context context)
 
   protected Integer toPixels(def data) {
+    if (data == null) {
+      return null
+    }
     switch (data) {
       case Integer:
         return data
