@@ -14,6 +14,14 @@ abstract class AbstractViewFactory extends AbstractFactory {
   Object newInstance(FactoryBuilderSupport builder, Object name, Object value,
       Map attributes) throws InstantiationException, IllegalAccessException {
     Object view = newInstance(context)
+    setAttributes(view, attributes)
+    return view
+  }
+
+  // should return a View but we're using Object type for testing purpose
+  protected abstract Object newInstance(Context context)
+
+  protected void setAttributes(Object view, Map attributes) {
     // TODO handle int (pixels) and String (dp, sp, ...) for dimensions
     def visibility = attributes.visibility as Integer
     if (visibility != null) view.visibility = visibility
@@ -25,11 +33,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
         clickListener(view)
       }
     }
-    return view
   }
-
-  // should return a View but we're using Object type for testing purpose
-  abstract Object newInstance(Context context, Object name, Map attributes)
 
   @Override
   boolean isLeaf() {

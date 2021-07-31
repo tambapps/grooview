@@ -6,7 +6,7 @@ class MockedObject {
   Map properties = [:]
 
   def getProperty(String name) {
-    return properties[name] ?: [:]
+    return properties[name] != null ? properties[name] : [:]
   }
 
   void setProperty(String name, Object newValue) {

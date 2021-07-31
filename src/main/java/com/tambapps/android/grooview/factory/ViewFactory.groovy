@@ -8,9 +8,8 @@ import groovy.transform.InheritConstructors
 class ViewFactory extends AbstractViewFactory {
 
   @Override
-  View newInstance(Context context, Object name, Map attributes) {
+  View newInstance(Context context) {
     return new View(context)
   }
-
 
 }

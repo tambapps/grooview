@@ -9,7 +9,7 @@ import groovy.transform.InheritConstructors
 class TextViewFactory extends AbstractViewFactory {
 
   @Override
-  View newInstance(Context context, Object name, Map attributes) {
+  View newInstance(Context context) {
     return new TextView(context)
   }
 
