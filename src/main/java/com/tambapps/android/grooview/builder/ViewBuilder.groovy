@@ -1,6 +1,8 @@
 package com.tambapps.android.grooview.builder
 
 import android.content.Context
+import android.graphics.Color
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -34,11 +36,20 @@ class ViewBuilder extends FactoryBuilderSupport {
   }
 
   private void initialize() {
-    setVariable("vertical", LinearLayout.VERTICAL);
-    setVariable("horizontal", LinearLayout.HORIZONTAL);
-    setVariable("visible", View.VISIBLE);
-    setVariable("invisible", View.INVISIBLE);
-    setVariable("gone", View.GONE);
+    setVariable("vertical", LinearLayout.VERTICAL)
+    setVariable("horizontal", LinearLayout.HORIZONTAL)
+    setVariable("visible", View.VISIBLE)
+    setVariable("invisible", View.INVISIBLE)
+    setVariable("gone", View.GONE)
+    setVariable("left", Gravity.LEFT)
+    setVariable("start", Gravity.START)
+    setVariable("top", Gravity.TOP)
+    setVariable("right", Gravity.RIGHT)
+    setVariable("end", Gravity.END)
+    setVariable("bottom", Gravity.BOTTOM)
+    setVariable("center", Gravity.CENTER)
+    setVariable("center_horizontal", Gravity.CENTER_HORIZONTAL)
+    setVariable("center_vertical", Gravity.CENTER_VERTICAL)
   }
 
   void registerViews() {
@@ -51,6 +62,4 @@ class ViewBuilder extends FactoryBuilderSupport {
     // We're doing nothing on purpose because node attributes should be set by
     // Factories
   }
-  // TODO add Color functions like in groovyfx
-
 }
