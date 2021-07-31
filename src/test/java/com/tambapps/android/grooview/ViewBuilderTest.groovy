@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class ViewBuilderTest {
 
@@ -34,16 +36,20 @@ class ViewBuilderTest {
 
   @Test
   void testSetAttribute() {
-    ViewFactory.metaClass.newViewInstance = { Context context, Object name, Map attributes ->
-      def o = new MockedObject()
-      o.type = delegate.class.name
-      return o
-    }
     MockedObject result = build {
       view(visibility: visible)
     }
     assertEquals(result.type, "View")
     assertEquals(result.visibility, View.VISIBLE)
+  }
+  @Test
+  void testSetInterfaceAttribute() {
+    MockedObject result = build {
+      view(onLongClickListener: { true })
+    }
+    assertEquals(result.type, "View")
+    assertNotNull(result.onLongClickListener)
+    assertTrue(result.onLongClickListener.onLongClick(null))
   }
 
   private static MockedObject build(Closure closure) {
