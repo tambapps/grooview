@@ -40,15 +40,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
       if (paddingEnd) view.setPadding(view.paddingStart, view.paddingTop, paddingEnd, view.paddingBottom)
       def paddingBottom = attributes['paddingBottom'] as Integer
       if (paddingBottom) view.setPadding(view.paddingStart, view.paddingTop, view.paddingEnd, paddingBottom)
-      /*
-      TODO what to do about these properties with multiple parameters
-      handleProperty("layerType", int, android.graphics.Paint)
-      handleProperty("leftTopRightBottom", int, int, int, int)
-      handleProperty("onReceiveContentListener", java.lang.String[], android.view.OnReceiveContentListener)
-      handleProperty("padding", int, int, int, int)
-      handleProperty("paddingRelative", int, int, int, int)
-      handleProperty("scrollIndicators", int, int)
-       */
+      it
     }
     return true
   }

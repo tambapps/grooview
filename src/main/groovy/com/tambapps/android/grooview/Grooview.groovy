@@ -3,7 +3,7 @@ package com.tambapps.android.grooview
 class Grooview {
 
   static Object start(Object root, Closure closure) {
-      return start(root.context, root, closure)
+    return start(root.context, root, closure)
   }
 
   static Object start(Object context, Object root, Closure closure) {

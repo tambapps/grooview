@@ -45,10 +45,10 @@ import android.widget.VideoView
 import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
-import groovy.transform.PackageScope
 
 import java.nio.file.Path
 
+// TODO allow to give default configuration
 class ViewBuilder extends FactoryBuilderSupport {
 
   final Object androidContext
