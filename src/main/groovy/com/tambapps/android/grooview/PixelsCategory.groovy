@@ -1,4 +1,4 @@
-package com.tambapps.android.grooview.util
+package com.tambapps.android.grooview
 
 import android.util.TypedValue
 

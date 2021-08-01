@@ -1,7 +1,5 @@
 package com.tambapps.android.grooview
 
-import com.tambapps.android.grooview.util.PixelsCategory
-
 class Grooview {
 
   static Object start(Object root, Closure closure) {
