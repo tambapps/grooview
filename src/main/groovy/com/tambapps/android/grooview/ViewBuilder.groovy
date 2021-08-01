@@ -25,6 +25,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.NumberPicker
 import android.widget.ProgressBar
 import android.widget.RadioButton
@@ -46,7 +47,6 @@ import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
 import com.tambapps.android.grooview.util.PixelsCategory
 
-import javax.swing.text.html.ListView
 import java.nio.file.Path
 
 class ViewBuilder extends FactoryBuilderSupport {
