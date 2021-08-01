@@ -1,6 +1,9 @@
 package com.tambapps.android.grooview.builder
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -9,6 +12,8 @@ import com.tambapps.android.grooview.factory.TextViewFactory
 import com.tambapps.android.grooview.factory.ViewFactory
 import com.tambapps.android.grooview.util.IdMapper
 import com.tambapps.android.grooview.util.PixelsCategory
+
+import java.nio.file.Path
 
 class ViewBuilder extends FactoryBuilderSupport {
 
@@ -88,6 +93,26 @@ class ViewBuilder extends FactoryBuilderSupport {
         throw e
       }
       return view
+    }
+  }
+
+  // useful methods to use when building
+  private Drawable toDrawable(def data) {
+    if (data == null) {
+      return null
+    }
+    switch (data) {
+      case File:
+      case Path:
+        return Drawable.createFromPath(data.toString())
+      case String:
+        // let's assume it's an url
+        def b = data.toURL().withInputStream {
+          BitmapFactory.decodeStream(it)
+        }
+        return new BitmapDrawable(context.resources, b)
+      default:
+        throw new IllegalArgumentException("Cannot convert object of type ${data.class.simpleName} to Drawable")
     }
   }
 }
