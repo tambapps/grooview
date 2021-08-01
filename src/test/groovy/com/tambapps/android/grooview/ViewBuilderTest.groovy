@@ -27,7 +27,8 @@ class ViewBuilderTest {
     AbstractViewFactory.metaClass.newInstance = {
       // mock the view creation
       def o = new MockedObject()
-      o.type = delegate.class.simpleName - 'Factory'
+      //o.type = delegate.class.simpleName - 'Factory'
+      o.type = delegate.viewClass.simpleName
       return o
     }
     View.metaClass.static.generateViewId = { ID_GENERATOR.getAndIncrement() }

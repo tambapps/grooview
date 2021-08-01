@@ -6,13 +6,47 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.View
+import android.widget.AbsListView
+import android.widget.AbsSeekBar
+import android.widget.AbsSpinner
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.CheckBox
+import android.widget.CheckedTextView
+import android.widget.CompoundButton
+import android.widget.DatePicker
+import android.widget.EditText
+import android.widget.ExpandableListView
+import android.widget.FrameLayout
+import android.widget.GridLayout
+import android.widget.GridView
+import android.widget.HorizontalScrollView
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
-import com.tambapps.android.grooview.factory.LinearLayoutFactory
-import com.tambapps.android.grooview.factory.TextViewFactory
-import com.tambapps.android.grooview.factory.ViewFactory
+import android.widget.NumberPicker
+import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.RatingBar
+import android.widget.RelativeLayout
+import android.widget.ScrollView
+import android.widget.SeekBar
+import android.widget.Spinner
+import android.widget.Switch
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
+import android.widget.TimePicker
+import android.widget.ToggleButton
+import android.widget.VideoView
+import com.tambapps.android.grooview.factory.ReflectViewFactory
+import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
 import com.tambapps.android.grooview.util.PixelsCategory
 
+import javax.swing.text.html.ListView
 import java.nio.file.Path
 
 class ViewBuilder extends FactoryBuilderSupport {
@@ -58,9 +92,55 @@ class ViewBuilder extends FactoryBuilderSupport {
   }
 
   void registerViews() {
-    registerFactory("view", new ViewFactory(context))
-    registerFactory("textView", new TextViewFactory(context))
-    registerFactory("linearLayout", new LinearLayoutFactory(context))
+    registerViewClass(View)
+    registerViewClass(AbsListView)
+    registerViewClass(AbsSeekBar)
+    registerViewClass(AbsSpinner)
+    registerViewClass(AutoCompleteTextView)
+    registerViewClass(Button)
+    registerViewClass(CalendarView)
+    registerViewClass(CheckBox)
+    registerViewClass(CheckedTextView)
+    registerViewClass(CompoundButton)
+    registerViewClass(DatePicker)
+    registerViewClass(EditText)
+    registerViewClass(ExpandableListView)
+    registerViewGroupClass(FrameLayout)
+    registerViewGroupClass(GridLayout)
+    registerViewClass(GridView)
+    registerViewGroupClass(HorizontalScrollView)
+    registerViewClass(ImageButton)
+    registerViewClass(ImageView)
+    registerViewGroupClass(LinearLayout)
+    registerViewGroupClass(ListView)
+    registerViewClass(NumberPicker)
+    registerViewClass(ProgressBar)
+    registerViewClass(RadioButton)
+    registerViewGroupClass(RadioGroup)
+    registerViewClass(RatingBar)
+    registerViewGroupClass(RelativeLayout)
+    registerViewGroupClass(ScrollView)
+    registerViewClass(SeekBar)
+    registerViewClass(Spinner)
+    registerViewClass(Switch)
+    registerViewGroupClass(TableLayout)
+    registerViewGroupClass(TableRow)
+    registerViewClass(TextView)
+    registerViewClass(TimePicker)
+    registerViewClass(ToggleButton)
+    registerViewClass(VideoView)
+  }
+
+  private void registerViewClass(Class clazz) {
+    String simpleName = clazz.simpleName
+    String name = simpleName[0].toLowerCase() + simpleName.substring(1)
+    registerFactory(name, new ReflectViewFactory(context, clazz))
+  }
+
+  private void registerViewGroupClass(Class clazz) {
+    String simpleName = clazz.simpleName
+    String name = simpleName[0].toLowerCase() + simpleName.substring(1)
+    registerFactory(name, new ReflectViewGroupFactory(context, clazz))
   }
 
   int generateId(String name, Object view) {
@@ -96,6 +176,7 @@ class ViewBuilder extends FactoryBuilderSupport {
     }
   }
 
+  // TODO add function for toast and dialog
   // useful methods to use when building
   private Drawable toDrawable(def data) {
     if (data == null) {
