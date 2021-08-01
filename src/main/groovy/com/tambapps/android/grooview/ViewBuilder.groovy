@@ -45,20 +45,14 @@ import android.widget.VideoView
 import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
-import com.tambapps.android.grooview.util.PixelsCategory
+import groovy.transform.PackageScope
 
 import java.nio.file.Path
 
 class ViewBuilder extends FactoryBuilderSupport {
 
-  static Object build(Object context, Object parent, Closure closure) {
-    PixelsCategory.context = context
-    closure.setDelegate(new ViewBuilder(context, parent))
-    closure.setResolveStrategy(Closure.DELEGATE_FIRST)
-    return closure()
-  }
-
-  private final Object context
+  @PackageScope
+  final Object androidContext
   private final Object root
   private final IdMapper idMapper = new IdMapper()
 
@@ -66,9 +60,9 @@ class ViewBuilder extends FactoryBuilderSupport {
     this(root.context, root)
   }
 
-  ViewBuilder(Object context, Object root) {
+  ViewBuilder(Object androidContext, Object root) {
     super(false)
-    this.context = context
+    this.androidContext = androidContext
     this.root = root
     initialize()
     autoRegisterNodes()
@@ -135,13 +129,21 @@ class ViewBuilder extends FactoryBuilderSupport {
   private void registerViewClass(Class clazz) {
     String simpleName = clazz.simpleName
     String name = simpleName[0].toLowerCase() + simpleName.substring(1)
-    registerFactory(name, new ReflectViewFactory(context, clazz))
+    registerFactory(name, newReflectViewFactory(clazz))
+  }
+
+  protected newReflectViewFactory(Class clazz) {
+    return new ReflectViewFactory(androidContext, clazz)
   }
 
   private void registerViewGroupClass(Class clazz) {
     String simpleName = clazz.simpleName
     String name = simpleName[0].toLowerCase() + simpleName.substring(1)
-    registerFactory(name, new ReflectViewGroupFactory(context, clazz))
+    registerFactory(name, newReflectViewGroupFactory( clazz))
+  }
+
+  protected newReflectViewGroupFactory(Class clazz) {
+    return new ReflectViewGroupFactory(androidContext, clazz)
   }
 
   int generateId(String name, Object view) {
@@ -192,7 +194,7 @@ class ViewBuilder extends FactoryBuilderSupport {
         def b = data.toURL().withInputStream {
           BitmapFactory.decodeStream(it)
         }
-        return new BitmapDrawable(context.resources, b)
+        return new BitmapDrawable(androidContext.resources, b)
       default:
         throw new IllegalArgumentException("Cannot convert object of type ${data.class.simpleName} to Drawable")
     }

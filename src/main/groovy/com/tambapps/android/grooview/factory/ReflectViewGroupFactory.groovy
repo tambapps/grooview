@@ -2,7 +2,7 @@ package com.tambapps.android.grooview.factory
 
 class ReflectViewGroupFactory extends AbstractViewGroupFactory {
 
-  private final Class viewClass
+  protected final Class viewClass
   ReflectViewGroupFactory(Object context, Class viewClass) {
     super(context)
     this.viewClass = viewClass

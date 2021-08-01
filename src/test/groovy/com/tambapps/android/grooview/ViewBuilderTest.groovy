@@ -2,8 +2,7 @@ package com.tambapps.android.grooview
 
 import android.util.TypedValue
 import android.view.View
-import com.tambapps.android.grooview.factory.AbstractViewFactory
-import com.tambapps.android.grooview.util.FakeContext
+import com.tambapps.android.grooview.util.FakeViewBuilder
 import com.tambapps.android.grooview.util.MockedObject
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -24,14 +23,6 @@ class ViewBuilderTest {
   }
   @BeforeAll
   static void mock() {
-    // TODO fix tests (maybe override all factories on ViewBuilder instance?)
-    AbstractViewFactory.metaClass.newInstance = {
-      // mock the view creation
-      def o = new MockedObject()
-      //o.type = delegate.class.simpleName - 'Factory'
-      o.type = delegate.viewClass.simpleName
-      return o
-    }
     View.metaClass.static.generateViewId = { ID_GENERATOR.getAndIncrement() }
     TypedValue.metaClass.static.convert = { new Random().nextInt() }
   }
@@ -108,6 +99,6 @@ class ViewBuilderTest {
   }
 
   private MockedObject build(Closure closure) {
-    return ViewBuilder.build(new FakeContext(), root, closure)
+    return Grooview.start(new FakeViewBuilder(root), closure)
   }
 }
