@@ -1,8 +1,10 @@
 package com.tambapps.android.grooview
 
+import android.util.TypedValue
 import android.view.View
 import com.tambapps.android.grooview.builder.ViewBuilder
 import com.tambapps.android.grooview.factory.AbstractViewFactory
+import com.tambapps.android.grooview.util.FakeContext
 import com.tambapps.android.grooview.util.MockedObject
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -30,6 +32,7 @@ class ViewBuilderTest {
       return o
     }
     View.metaClass.static.generateViewId = { ID_GENERATOR.getAndIncrement() }
+    TypedValue.metaClass.static.convert = { new Random().nextInt() }
   }
 
   @Test
@@ -104,6 +107,6 @@ class ViewBuilderTest {
   }
 
   private MockedObject build(Closure closure) {
-    return ViewBuilder.build(null, root, closure)
+    return ViewBuilder.build(new FakeContext(), root, closure)
   }
 }

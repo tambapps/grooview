@@ -8,16 +8,18 @@ import com.tambapps.android.grooview.factory.LinearLayoutFactory
 import com.tambapps.android.grooview.factory.TextViewFactory
 import com.tambapps.android.grooview.factory.ViewFactory
 import com.tambapps.android.grooview.util.IdMapper
+import com.tambapps.android.grooview.util.PixelsCategory
 
 class ViewBuilder extends FactoryBuilderSupport {
 
-  static Object build(Context context, Object parent, Closure closure) {
+  static Object build(Object context, Object parent, Closure closure) {
+    PixelsCategory.context = context
     closure.setDelegate(new ViewBuilder(context, parent))
     closure.setResolveStrategy(Closure.DELEGATE_FIRST)
     return closure()
   }
 
-  private final Context context
+  private final Object context
   private final Object root
   private final IdMapper idMapper = new IdMapper()
 
@@ -25,7 +27,7 @@ class ViewBuilder extends FactoryBuilderSupport {
     this(root.context, root, initialize)
   }
 
-  ViewBuilder(Context context, Object root, boolean init = true) {
+  ViewBuilder(Object context, Object root, boolean init = true) {
     super(init)
     this.context = context
     this.root = root
