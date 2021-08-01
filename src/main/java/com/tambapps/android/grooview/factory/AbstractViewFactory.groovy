@@ -38,6 +38,8 @@ abstract class AbstractViewFactory extends AbstractFactory {
   boolean onHandleNodeAttributes(FactoryBuilderSupport builder, Object node, Map attributes) {
     ObjectPropertySetter setter = new ObjectPropertySetter(node, attributes, builder)
     setter.with {
+      // TODO remove 'simple' properties (the ones that don't need custom conversion) from here
+      //  and let groovy handle them standard bean property matching for remaining attributes
       handleProperty("accessibilityDelegate", View.AccessibilityDelegate)
       handleProperty("accessibilityHeading", boolean)
       handleProperty("accessibilityLiveRegion", int)
@@ -221,7 +223,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
 
        */
     }
-    return false
+    return true
   }
 
   // should return a View but we're using Object type for testing purpose
@@ -305,7 +307,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
     }
 
     void handleProperty(String mapPropertyName, String objectPropertyName, Closure converter = CLOSURE_CONFIGURER) {
-      def value = attributes[mapPropertyName]
+      def value = attributes.remove(mapPropertyName)
       if (value != null) {
         InvokerHelper.setProperty(view, objectPropertyName, converter(value))
       }
