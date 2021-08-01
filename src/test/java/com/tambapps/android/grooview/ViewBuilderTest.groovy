@@ -1,6 +1,7 @@
 package com.tambapps.android.grooview
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import com.tambapps.android.grooview.builder.ViewBuilder
 import com.tambapps.android.grooview.factory.AbstractViewFactory
@@ -42,6 +43,7 @@ class ViewBuilderTest {
     assertEquals(result.type, "View")
     assertEquals(result.visibility, View.VISIBLE)
   }
+
   @Test
   void testSetInterfaceAttribute() {
     MockedObject result = build {
@@ -52,7 +54,17 @@ class ViewBuilderTest {
     assertTrue(result.onLongClickListener.onLongClick(null))
   }
 
+  @Test
+  void testLinearLayout() {
+    MockedObject result = build {
+      linearLayout(visibility: gone) {
+        view(backgroundColor: 0xff00ffff)
+      }
+    }
+    assertEquals(result.type, "LinearLayout")
+    assertEquals(result.visibility, View.GONE)
+  }
   private static MockedObject build(Closure closure) {
-    return ViewBuilder.build(null, closure)
+    return ViewBuilder.build(null, null, closure)
   }
 }

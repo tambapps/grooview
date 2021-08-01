@@ -1,38 +1,36 @@
 package com.tambapps.android.grooview.builder
 
 import android.content.Context
-import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.tambapps.android.grooview.factory.LinearLayoutFactory
 import com.tambapps.android.grooview.factory.TextViewFactory
 import com.tambapps.android.grooview.factory.ViewFactory
 
 class ViewBuilder extends FactoryBuilderSupport {
 
-  static Object build(Context context, Closure closure) {
-    closure.setDelegate(new ViewBuilder(context))
+  static Object build(Context context, ViewGroup parent, Closure closure) {
+    closure.setDelegate(new ViewBuilder(context, parent))
     closure.setResolveStrategy(Closure.DELEGATE_FIRST)
     return closure();
   }
 
-  private final ViewGroup parent;
-  private final Context context;
+  private final ViewGroup parent
+  private final Context context
 
   final List<View> views = new ArrayList<>();
 
-  /*
   ViewBuilder(ViewGroup parent, boolean initialize = true) {
-    this(parent, parent.getContext(), initialize)
+    this(parent.context, parent, initialize)
   }
 
-   */
-
-  ViewBuilder(Context context, boolean init = true) {
+  ViewBuilder(Context context, ViewGroup parent, boolean init = true) {
     super(init)
-    this.context = context;
-    initialize();
+    this.context = context
+    this.parent = parent
+    initialize()
   }
 
   private void initialize() {
@@ -55,11 +53,7 @@ class ViewBuilder extends FactoryBuilderSupport {
   void registerViews() {
     registerFactory("view", new ViewFactory(context))
     registerFactory("textView", new TextViewFactory(context))
+    registerFactory("linearLayout", new LinearLayoutFactory(context))
   }
 
-  @Override
-  protected void setNodeAttributes(Object node, Map attributes) {
-    // We're doing nothing on purpose because node attributes should be set by
-    // Factories
-  }
 }

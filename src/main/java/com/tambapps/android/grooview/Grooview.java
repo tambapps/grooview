@@ -17,7 +17,7 @@ public class Grooview extends FrameLayout {
     }
 
     public void show(@DelegatesTo(ViewBuilder.class) Closure<?> closure) {
-        ViewBuilder viewBuilder = new ViewBuilder(this.getContext());
+        ViewBuilder viewBuilder = new ViewBuilder(this.getContext(), this);
         closure.setDelegate(viewBuilder);
         closure.setResolveStrategy(Closure.DELEGATE_FIRST);
         if (getChildCount() > 0) {

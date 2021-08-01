@@ -31,9 +31,12 @@ abstract class AbstractViewFactory extends AbstractFactory {
   @Override
   Object newInstance(FactoryBuilderSupport builder, Object name, Object value,
       Map attributes) throws InstantiationException, IllegalAccessException {
-    Object view = newInstance(context)
+    return newInstance(context)
+  }
 
-    ObjectPropertySetter setter = new ObjectPropertySetter(view, attributes, builder)
+  @Override
+  boolean onHandleNodeAttributes(FactoryBuilderSupport builder, Object node, Map attributes) {
+    ObjectPropertySetter setter = new ObjectPropertySetter(node, attributes, builder)
     setter.with {
       handleProperty("accessibilityDelegate", View.AccessibilityDelegate)
       handleProperty("accessibilityHeading", boolean)
@@ -218,8 +221,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
 
        */
     }
-
-    return view
+    return false
   }
 
   // should return a View but we're using Object type for testing purpose
