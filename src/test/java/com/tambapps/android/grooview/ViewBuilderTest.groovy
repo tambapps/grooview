@@ -59,11 +59,19 @@ class ViewBuilderTest {
     MockedObject result = build {
       linearLayout(visibility: gone) {
         view(backgroundColor: 0xff00ffff)
+        textView()
+        linearLayout() {
+          for (i in 0..<5) view()
+        }
       }
     }
     assertEquals(result.type, "LinearLayout")
     assertEquals(result.visibility, View.GONE)
+    assertEquals(3, result.children.size())
+    MockedObject nestedLinearLayout = result.children[2]
+    assertEquals(5, nestedLinearLayout.children.size())
   }
+
   private static MockedObject build(Closure closure) {
     return ViewBuilder.build(null, null, closure)
   }

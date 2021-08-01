@@ -17,6 +17,7 @@ class ViewBuilder extends FactoryBuilderSupport {
     return closure();
   }
 
+  // TODO remove view parent(?)
   private final ViewGroup parent
   private final Context context
 

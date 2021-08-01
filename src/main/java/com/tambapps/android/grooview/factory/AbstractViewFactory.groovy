@@ -313,4 +313,9 @@ abstract class AbstractViewFactory extends AbstractFactory {
       }
     }
   }
+
+  @Override
+  void setParent(FactoryBuilderSupport builder, Object parent, Object child) {
+    super.setParent(builder, parent, child)
+  }
 }

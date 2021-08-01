@@ -2,7 +2,6 @@ package com.tambapps.android.grooview.util
 
 class MockedObject {
 
-  String type
   Map properties = [:]
 
   def getProperty(String name) {
@@ -13,7 +12,17 @@ class MockedObject {
     properties[name] = newValue
   }
 
+  void addView(Object o) {
+    def children = properties.computeIfAbsent('children') { [] }
+    children.add(o)
+  }
+
   Object invokeMethod(String name, Object args) {
     return [:]
+  }
+
+  @Override
+  String toString() {
+    return properties['type'] + "@" + hashCode()
   }
 }
