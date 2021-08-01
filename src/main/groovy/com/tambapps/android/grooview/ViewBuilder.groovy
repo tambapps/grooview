@@ -51,7 +51,6 @@ import java.nio.file.Path
 
 class ViewBuilder extends FactoryBuilderSupport {
 
-  @PackageScope
   final Object androidContext
   private final Object root
   private final IdMapper idMapper = new IdMapper()
