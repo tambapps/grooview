@@ -1,14 +1,13 @@
 package com.tambapps.android.grooview.factory
 
-import android.content.Context
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
 
 abstract class AbstractViewFactory extends AbstractFactory {
 
-  private final Context context
+  private final Object context
 
-  AbstractViewFactory(Context context) {
+  AbstractViewFactory(Object context) {
     this.context = context
   }
 
@@ -55,7 +54,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
   }
 
   // should return a View but we're using Object type for testing purpose
-  protected abstract Object newInstance(Context context)
+  protected abstract Object newInstance(Object context)
 
   @Override
   boolean isLeaf() {

@@ -62,15 +62,16 @@ class ViewBuilder extends FactoryBuilderSupport {
   private final Object root
   private final IdMapper idMapper = new IdMapper()
 
-  ViewBuilder(Object root, boolean initialize = true) {
-    this(root.context, root, initialize)
+  ViewBuilder(Object root) {
+    this(root.context, root)
   }
 
-  ViewBuilder(Object context, Object root, boolean init = true) {
-    super(init)
+  ViewBuilder(Object context, Object root) {
+    super(false)
     this.context = context
     this.root = root
     initialize()
+    autoRegisterNodes()
   }
 
   private void initialize() {

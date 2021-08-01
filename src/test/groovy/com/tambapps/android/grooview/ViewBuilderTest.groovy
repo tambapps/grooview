@@ -24,6 +24,7 @@ class ViewBuilderTest {
   }
   @BeforeAll
   static void mock() {
+    // TODO fix tests (maybe override all factories on ViewBuilder instance?)
     AbstractViewFactory.metaClass.newInstance = {
       // mock the view creation
       def o = new MockedObject()
