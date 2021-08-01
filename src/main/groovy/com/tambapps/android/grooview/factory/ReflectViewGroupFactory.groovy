@@ -1,15 +1,13 @@
 package com.tambapps.android.grooview.factory
 
-class ReflectViewGroupFactory extends AbstractViewGroupFactory {
+import groovy.transform.InheritConstructors
 
-  protected final Class viewClass
-  ReflectViewGroupFactory(Object context, Class viewClass) {
-    super(context)
-    this.viewClass = viewClass
-  }
+@InheritConstructors
+class ReflectViewGroupFactory extends ReflectViewFactory {
 
   @Override
-  protected Object newInstance(Object context) {
-    return viewClass.newInstance(context)
+  boolean isLeaf() {
+    return false
   }
+
 }

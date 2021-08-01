@@ -2,6 +2,7 @@ package com.tambapps.android.grooview
 
 import android.util.TypedValue
 import android.view.View
+import android.widget.TextView
 import com.tambapps.android.grooview.util.FakeViewBuilder
 import com.tambapps.android.grooview.util.MockedObject
 import org.junit.jupiter.api.BeforeAll
@@ -96,6 +97,20 @@ class ViewBuilderTest {
     v.onClickListener(null)
     assertNotNull(foundView)
     assertNotNull(foundView.id)
+  }
+
+  @Test
+  void testDefaultProperties() {
+    def builder = new FakeViewBuilder(root)
+    def defaultViewProperties = builder.defaultViewProperties
+    def defaultTextViewProperties = [onLongClickListener: { true }]
+    defaultViewProperties[TextView] = defaultTextViewProperties
+
+    def result = Grooview.start(builder) {
+      textView()
+    }
+    assertEquals('TextView', result.type)
+    assertEquals(defaultTextViewProperties.onLongClickListener, result.onLongClickListener)
   }
 
   private MockedObject build(Closure closure) {

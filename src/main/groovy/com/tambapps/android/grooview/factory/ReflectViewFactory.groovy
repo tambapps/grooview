@@ -13,4 +13,9 @@ class ReflectViewFactory extends AbstractViewFactory {
   protected Object newInstance(Object context) {
     return viewClass.newInstance(context)
   }
+
+  @Override
+  protected Map getDefaultProperties(FactoryBuilderSupport builder) {
+    return builder.defaultViewProperties[viewClass]
+  }
 }

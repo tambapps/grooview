@@ -20,6 +20,12 @@ abstract class AbstractViewFactory extends AbstractFactory {
   @Override
   boolean onHandleNodeAttributes(FactoryBuilderSupport builder, Object node, Map attributes) {
     new ObjectPropertySetter(builder, node, attributes).with {
+      def defaultProperties = getDefaultProperties(builder)
+      if (defaultProperties) {
+        for (entry in defaultProperties) {
+          InvokerHelper.setProperty(node, entry.key.toString(), entry.value)
+        }
+      }
       handleProperty("autofillHints", String[])
       handleProperty("id") { builder.generateId(it, view) }
       handleProperty("labelFor", builder.&toViewId)
@@ -83,5 +89,9 @@ abstract class AbstractViewFactory extends AbstractFactory {
   @Override
   void setParent(FactoryBuilderSupport builder, Object parent, Object child) {
     super.setParent(builder, parent, child)
+  }
+
+  protected Map getDefaultProperties(FactoryBuilderSupport builder) {
+    return [:]
   }
 }

@@ -48,12 +48,13 @@ import com.tambapps.android.grooview.util.IdMapper
 
 import java.nio.file.Path
 
-// TODO allow to give default configuration
 class ViewBuilder extends FactoryBuilderSupport {
 
   final Object androidContext
   private final Object root
   private final IdMapper idMapper = new IdMapper()
+  // map of View class -> default properties (name -> property)
+  final Map<Class, Map<String, Object>> defaultViewProperties = [:]
 
   ViewBuilder(Object root) {
     this(root.context, root)
