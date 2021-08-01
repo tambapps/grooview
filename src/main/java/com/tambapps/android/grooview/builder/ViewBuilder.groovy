@@ -47,6 +47,7 @@ class ViewBuilder extends FactoryBuilderSupport {
     setVariable("center", Gravity.CENTER)
     setVariable("center_horizontal", Gravity.CENTER_HORIZONTAL)
     setVariable("center_vertical", Gravity.CENTER_VERTICAL)
+    // TODO text alignement text direction constants
   }
 
   void registerViews() {
@@ -57,6 +58,16 @@ class ViewBuilder extends FactoryBuilderSupport {
 
   int generateId(String name, Object view) {
     return idMapper.generateId(name, view)
+  }
+
+  Integer toViewId(Object data) {
+    if (data == null) return null
+    switch (data) {
+      case Integer:
+        return data
+      default:
+        return idMapper[data.toString()]
+    }
   }
 
   @Override

@@ -51,13 +51,22 @@ class ViewBuilderTest {
   }
 
   @Test
+  void testSetBeanAttribute() {
+    MockedObject result = build {
+      view(alpha: 1.234)
+    }
+    assertEquals(result.type, "View")
+    assertEquals(result.alpha, 1.234)
+  }
+
+  @Test
   void testSetInterfaceAttribute() {
     MockedObject result = build {
       view(onLongClickListener: { true })
     }
     assertEquals(result.type, "View")
     assertNotNull(result.onLongClickListener)
-    assertTrue(result.onLongClickListener.onLongClick(null))
+    assertTrue(result.onLongClickListener(null))
   }
 
   @Test
@@ -89,7 +98,7 @@ class ViewBuilderTest {
       })
     }
     assertNotNull(v.onClickListener)
-    v.onClickListener.onClick(null)
+    v.onClickListener(null)
     assertNotNull(foundView)
     assertNotNull(foundView.id)
   }

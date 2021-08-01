@@ -16,6 +16,10 @@ class IdMapper {
     return id
   }
 
+  Object getAt(String stringId) {
+    return map[stringId]
+  }
+
   Object getAt(def parent, String stringId) {
     def id = map[stringId]
     return id != null ? parent.findViewById(id) : null
