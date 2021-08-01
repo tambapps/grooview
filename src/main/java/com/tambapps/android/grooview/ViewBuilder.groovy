@@ -1,6 +1,6 @@
-package com.tambapps.android.grooview.builder
+package com.tambapps.android.grooview
 
-import android.content.Context
+
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable

@@ -2,7 +2,6 @@ package com.tambapps.android.grooview
 
 import android.util.TypedValue
 import android.view.View
-import com.tambapps.android.grooview.builder.ViewBuilder
 import com.tambapps.android.grooview.factory.AbstractViewFactory
 import com.tambapps.android.grooview.util.FakeContext
 import com.tambapps.android.grooview.util.MockedObject
