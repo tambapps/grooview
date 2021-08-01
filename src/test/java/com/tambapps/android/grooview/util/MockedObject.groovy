@@ -21,6 +21,11 @@ class MockedObject {
     return [:]
   }
 
+  Object findViewById(int id) {
+    List children = properties['children'] ?: []
+    return children.find { it.id == id }
+  }
+
   @Override
   String toString() {
     return properties['type'] + "@" + hashCode()

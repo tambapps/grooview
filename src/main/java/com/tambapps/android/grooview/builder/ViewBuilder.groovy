@@ -3,34 +3,32 @@ package com.tambapps.android.grooview.builder
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.tambapps.android.grooview.factory.LinearLayoutFactory
 import com.tambapps.android.grooview.factory.TextViewFactory
 import com.tambapps.android.grooview.factory.ViewFactory
+import com.tambapps.android.grooview.util.IdMapper
 
 class ViewBuilder extends FactoryBuilderSupport {
 
-  static Object build(Context context, ViewGroup parent, Closure closure) {
+  static Object build(Context context, Object parent, Closure closure) {
     closure.setDelegate(new ViewBuilder(context, parent))
     closure.setResolveStrategy(Closure.DELEGATE_FIRST)
-    return closure();
+    return closure()
   }
 
-  // TODO remove view parent(?)
-  private final ViewGroup parent
   private final Context context
+  private final Object root
+  private final IdMapper idMapper = new IdMapper()
 
-  final List<View> views = new ArrayList<>();
-
-  ViewBuilder(ViewGroup parent, boolean initialize = true) {
-    this(parent.context, parent, initialize)
+  ViewBuilder(Object root, boolean initialize = true) {
+    this(root.context, root, initialize)
   }
 
-  ViewBuilder(Context context, ViewGroup parent, boolean init = true) {
+  ViewBuilder(Context context, Object root, boolean init = true) {
     super(init)
     this.context = context
-    this.parent = parent
+    this.root = root
     initialize()
   }
 
@@ -57,4 +55,26 @@ class ViewBuilder extends FactoryBuilderSupport {
     registerFactory("linearLayout", new LinearLayoutFactory(context))
   }
 
+  int generateId(String name, Object view) {
+    return idMapper.generateId(name, view)
+  }
+
+  @Override
+  protected void nodeCompleted(Object parent, Object node) {
+    (parent ?: root).addView(node)
+    super.nodeCompleted(parent, node)
+  }
+
+  @Override
+  Object getProperty(String propertyName) {
+    try {
+      super.getProperty(propertyName)
+    } catch (MissingPropertyException e) {
+      def view = idMapper[root, propertyName]
+      if (view == null) {
+        throw e
+      }
+      return view
+    }
+  }
 }

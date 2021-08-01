@@ -8,8 +8,6 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import org.codehaus.groovy.runtime.InvokerHelper;
 
-import java.util.List;
-
 public class Grooview extends FrameLayout {
 
     public Grooview(Context context) {
@@ -24,11 +22,6 @@ public class Grooview extends FrameLayout {
             removeViewAt(0);
         }
         InvokerHelper.invokeClosure(closure, new Object[] { this });
-        List<View> views = viewBuilder.getViews();
-        if (views.size() != 1) {
-            throw new IllegalStateException();
-        }
-        addView(views.get(0));
     }
 
 

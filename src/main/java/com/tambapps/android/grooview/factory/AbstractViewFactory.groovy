@@ -97,8 +97,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("horizontalScrollbarThumbDrawable", this.&toDrawable)
       handleProperty("horizontalScrollbarTrackDrawable", this.&toDrawable)
       handleProperty("hovered", boolean)
-      // TODO handle Strings for ids (use hashcode in the back) and allow to retrieve views by the ids (String given)
-      handleProperty("id", int)
+      handleProperty("id") { builder.generateId(it, view) }
       handleProperty("importantForAccessibility", int)
       handleProperty("importantForAutofill", int)
       handleProperty("importantForContentCapture", int)
