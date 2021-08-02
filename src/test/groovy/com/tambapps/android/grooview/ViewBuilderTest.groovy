@@ -1,5 +1,6 @@
 package com.tambapps.android.grooview
 
+import android.os.Looper
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -26,6 +27,9 @@ class ViewBuilderTest {
   static void mock() {
     View.metaClass.static.generateViewId = { ID_GENERATOR.getAndIncrement() }
     TypedValue.metaClass.static.convert = { new Random().nextInt() }
+    Looper.metaClass.static.getMainLooper = {
+      return [isCurrentThread: { true }]
+    }
   }
 
   @Test
@@ -39,7 +43,7 @@ class ViewBuilderTest {
 
   @Test
   void testSetAttribute() {
-    MockedObject result = build {
+    def result = build {
       view(visibility: visible)
     }
     assertEquals(result.type, "View")
@@ -48,7 +52,7 @@ class ViewBuilderTest {
 
   @Test
   void testSetBeanAttribute() {
-    MockedObject result = build {
+    def result = build {
       view(alpha: 1.234)
     }
     assertEquals(result.type, "View")
@@ -57,7 +61,7 @@ class ViewBuilderTest {
 
   @Test
   void testSetInterfaceAttribute() {
-    MockedObject result = build {
+    def result = build {
       view(onLongClickListener: { true })
     }
     assertEquals(result.type, "View")
@@ -67,9 +71,9 @@ class ViewBuilderTest {
 
   @Test
   void testLinearLayout() {
-    MockedObject result = build {
+    def result = build {
       linearLayout(visibility: gone) {
-        view(backgroundColor: 0xff00ffff)
+        view(backgroundColor: 0xff00ff)
         textView()
         linearLayout() {
           for (i in 0..<5) view()
@@ -79,7 +83,7 @@ class ViewBuilderTest {
     assertEquals(result.type, "LinearLayout")
     assertEquals(result.visibility, View.GONE)
     assertEquals(3, result.children.size())
-    MockedObject nestedLinearLayout = result.children[2]
+    def nestedLinearLayout = result.children[2]
     assertEquals(5, nestedLinearLayout.children.size())
   }
 
@@ -87,7 +91,7 @@ class ViewBuilderTest {
   void testViewWithId() {
     def v
     def foundView
-    MockedObject result = build {
+    def result = build {
       view(visibility: visible, id: 'view2')
       v = view(visibility: visible, onClickListener: {
         foundView = view2
@@ -113,7 +117,7 @@ class ViewBuilderTest {
     assertEquals(defaultTextViewProperties.onLongClickListener, result.onLongClickListener)
   }
 
-  private MockedObject build(Closure closure) {
+  private def build(Closure closure) {
     return Grooview.start(new FakeViewBuilder(root), closure)
   }
 }

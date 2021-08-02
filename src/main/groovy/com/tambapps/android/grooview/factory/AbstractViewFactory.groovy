@@ -1,6 +1,7 @@
 package com.tambapps.android.grooview.factory
 
 import com.tambapps.android.grooview.util.ContextUtils
+import com.tambapps.android.grooview.util.ViewDecorator
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
 
@@ -15,7 +16,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
   @Override
   Object newInstance(FactoryBuilderSupport builder, Object name, Object value,
       Map attributes) throws InstantiationException, IllegalAccessException {
-    return newInstance(context)
+    return new ViewDecorator(newInstance(context))
   }
 
   @Override
