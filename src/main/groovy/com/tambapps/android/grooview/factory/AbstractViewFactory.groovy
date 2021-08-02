@@ -34,7 +34,8 @@ abstract class AbstractViewFactory extends AbstractFactory {
 
       // me-made properties TODO document them
       if (attributes.remove("rippleEffect")) {
-        view.setForeground(ContextUtils.rippleDrawable(context))
+        view.setForeground(ContextUtils.rippleDrawable(builder.androidContext))
+        view.setClickable(true)
       }
 
       // handling padding
