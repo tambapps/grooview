@@ -1,5 +1,6 @@
 package com.tambapps.android.grooview.factory
 
+import com.tambapps.android.grooview.util.ContextUtils
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
 
@@ -29,6 +30,11 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty("autofillHints", String[])
       handleProperty("id") { builder.generateId(it, view) }
       handleProperty("labelFor", builder.&toViewId)
+
+      // me-made properties TODO document them
+      if (attributes.remove("rippleEffect")) {
+        view.setForeground(ContextUtils.rippleDrawable(context))
+      }
 
       // handling padding
       def paddings = (attributes['padding'] as List)
