@@ -46,6 +46,7 @@ import android.widget.VideoView
 import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
+import com.tambapps.android.grooview.util.ViewDecorator
 import org.codehaus.groovy.runtime.InvokerHelper
 
 import java.nio.file.Path
@@ -65,7 +66,7 @@ class ViewBuilder extends FactoryBuilderSupport {
   ViewBuilder(Object androidContext, Object root) {
     super(false)
     this.androidContext = androidContext
-    this.root = root
+    this.root = root instanceof ViewDecorator ? root : new ViewDecorator(root)
     initialize()
     autoRegisterNodes()
   }
