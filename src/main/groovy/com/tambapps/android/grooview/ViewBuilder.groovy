@@ -2,6 +2,7 @@ package com.tambapps.android.grooview
 
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.Gravity
@@ -45,6 +46,7 @@ import android.widget.VideoView
 import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
+import org.codehaus.groovy.runtime.InvokerHelper
 
 import java.nio.file.Path
 
@@ -179,9 +181,38 @@ class ViewBuilder extends FactoryBuilderSupport {
     }
   }
 
+  @Override
+  protected void setNodeAttributes(Object node, Map attributes) {
+    for (Map.Entry entry : (Set<Map.Entry>) attributes.entrySet()) {
+      String property = entry.getKey().toString()
+      Object value = entry.getValue()
+      if (property.endsWith("Color")) {
+        value = color(value)
+      }
+      InvokerHelper.setProperty(node, property, value)
+    }
+  }
+
   // TODO add function for toast and dialog
   // useful methods to use when building
-  private Drawable toDrawable(def data) {
+
+  Integer color(def data) {
+    if (data == null) {
+      return null
+    }
+    switch (data) {
+      case Integer:
+        return data
+      case { it instanceof Number }:
+        long argb = data.toLong()
+        return Color.argb(((argb >> 32) & 255) as int, ((argb >> 16) & 255) as int, ((argb >> 8) & 255) as int, (argb & 255) as int)
+      case String:
+        return Color.parseColor(data)
+      default:
+        throw new IllegalArgumentException("Cannot convert object of type ${data.class.simpleName} to color integer")
+    }
+  }
+  Drawable drawable(def data) {
     if (data == null) {
       return null
     }
