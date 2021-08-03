@@ -1,6 +1,7 @@
 package com.tambapps.android.grooview.util
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.os.Looper
 import android.view.View
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
@@ -24,10 +25,18 @@ class ViewDecorator {
       throw new MissingMethodException(name, View, convertedArgs)
     }
       if (Looper.getMainLooper().isCurrentThread()) {
-      InvokerHelper.invokeMethod(_view, name, convertedArgs)
+      try {
+        return InvokerHelper.invokeMethod(_view, name, convertedArgs)
+      } catch (Exception e) {
+        errorDialog(e)
+      }
     } else {
       ((Activity) _view.context).runOnUiThread {
-        InvokerHelper.invokeMethod(_view, name, convertedArgs)
+        try {
+          InvokerHelper.invokeMethod(_view, name, convertedArgs)
+        } catch(Exception e) {
+          errorDialog(e)
+        }
       }
     }
   }
@@ -42,12 +51,27 @@ class ViewDecorator {
       throw new MissingPropertyException(name, _view.class)
     }
     if (Looper.getMainLooper().isCurrentThread()) {
-      InvokerHelper.setProperty(_view, name, newValue)
+      try {
+        InvokerHelper.setProperty(_view, name, newValue)
+      } catch (Exception e) {
+        errorDialog(e)
+      }
     } else {
       ((Activity) _view.context).runOnUiThread {
-        InvokerHelper.setProperty(_view, name, newValue)
+        try {
+          InvokerHelper.setProperty(_view, name, newValue)
+        } catch (Exception e) {
+          errorDialog(e)
+        }
       }
     }
   }
 
+  private void errorDialog(Exception e) {
+    new AlertDialog.Builder(_view.context)
+        .setTitle("An error occured on main thread")
+        .setMessage("${e.class.simpleName}: ${e.message}")
+        .setPositiveButton("ok", null)
+        .show()
+  }
 }
