@@ -32,9 +32,6 @@ class ViewBuilderTest {
     Looper.metaClass.static.getMainLooper = {
       return [isCurrentThread: { true }]
     }
-    MetaClass.metaClass.respondsTo = { String p ->
-      true
-    }
     ClassEnhancer.metaClass.static.enhanceClasses = { ->
 
     }

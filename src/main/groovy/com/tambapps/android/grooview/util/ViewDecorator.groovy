@@ -19,11 +19,8 @@ class ViewDecorator {
   def invokeMethod(String name, args) {
     // replace decorator by actual object
     def convertedArgs = args.collect { it instanceof ViewDecorator ? it._view : it } as Object[]
-    // check if method exists before calling the main thread
-    if (!_view.metaClass.respondsTo(name)) {
-      throw new MissingMethodException(name, View, convertedArgs)
-    }
-      if (Looper.getMainLooper().isCurrentThread()) {
+
+    if (Looper.getMainLooper().isCurrentThread()) {
       try {
         return InvokerHelper.invokeMethod(_view, name, convertedArgs)
       } catch (Exception e) {
@@ -46,9 +43,6 @@ class ViewDecorator {
   }
 
   void setProperty(String name, Object newValue) {
-    if (!DefaultGroovyMethods.hasProperty(_view, name)) {
-      throw new MissingPropertyException(name, _view.class)
-    }
     if (Looper.getMainLooper().isCurrentThread()) {
       try {
         smartSetProperty(_view, name, newValue)
