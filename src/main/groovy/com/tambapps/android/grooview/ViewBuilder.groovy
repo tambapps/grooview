@@ -51,6 +51,7 @@ import org.codehaus.groovy.runtime.InvokerHelper
 
 import java.nio.file.Path
 
+// TODO listeners are executed in main thread
 class ViewBuilder extends FactoryBuilderSupport {
 
   final Object androidContext

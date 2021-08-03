@@ -1,10 +1,11 @@
 package com.tambapps.android.grooview.util
 
 import android.view.View
+import android.view.ViewGroup
 
 class MockedObject {
 
-  Map properties = [:]
+  Map properties = ['class': View, 'metaClass': ViewGroup.metaClass]
 
   def getProperty(String name) {
     return properties[name] != null ? properties[name] : [:]
@@ -57,5 +58,17 @@ class MockedObject {
   @Override
   String toString() {
     return properties['type'] + "@" + hashCode()
+  }
+
+  Object getVisibility() {
+    return properties['visibility']
+  }
+
+  Object getId() {
+    return properties['id']
+  }
+
+  Object getBackgroundColor() {
+    return properties['backgroundColor']
   }
 }
