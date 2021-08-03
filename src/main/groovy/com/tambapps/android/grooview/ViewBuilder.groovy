@@ -1,8 +1,6 @@
 package com.tambapps.android.grooview
 
-
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.Gravity
@@ -41,13 +39,14 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.TimePicker
+import android.widget.Toast
 import android.widget.ToggleButton
 import android.widget.VideoView
 import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
+import com.tambapps.android.grooview.util.Utils
 import com.tambapps.android.grooview.util.ViewDecorator
-import org.codehaus.groovy.runtime.InvokerHelper
 
 import java.nio.file.Path
 
@@ -87,7 +86,6 @@ class ViewBuilder extends FactoryBuilderSupport {
     setVariable("center", Gravity.CENTER)
     setVariable("center_horizontal", Gravity.CENTER_HORIZONTAL)
     setVariable("center_vertical", Gravity.CENTER_VERTICAL)
-    // TODO text alignement text direction constants
   }
 
   void registerViews() {
@@ -185,35 +183,25 @@ class ViewBuilder extends FactoryBuilderSupport {
 
   @Override
   protected void setNodeAttributes(Object node, Map attributes) {
-    for (Map.Entry entry : (Set<Map.Entry>) attributes.entrySet()) {
-      String property = entry.getKey().toString()
-      Object value = entry.getValue()
-      if (property.endsWith("Color")) {
-        value = color(value)
-      }
-      InvokerHelper.setProperty(node, property, value)
+    for (entry in attributes) {
+      ViewDecorator.smartSetProperty(node, entry.key.toString(), entry.value)
     }
   }
 
-  // TODO add function for toast and dialog
   // useful methods to use when building
 
-  Integer color(def data) {
-    if (data == null) {
-      return null
-    }
-    switch (data) {
-      case Integer:
-        return data
-      case { it instanceof Number }:
-        long argb = data.toLong()
-        return Color.argb(((argb >> 32) & 255) as int, ((argb >> 16) & 255) as int, ((argb >> 8) & 255) as int, (argb & 255) as int)
-      case String:
-        return Color.parseColor(data)
-      default:
-        throw new IllegalArgumentException("Cannot convert object of type ${data.class.simpleName} to color integer")
-    }
+  def dialog() {
+    return Class.forName('androidx.appcompat.app.AlertDialog').newInstance(context)
   }
+
+  void toast(String text, int length = Toast.LENGTH_SHORT) {
+    Toast.makeText(context, text, length).show()
+  }
+
+  Integer color(def data) {
+    Utils.color(data)
+  }
+
   Drawable drawable(def data) {
     if (data == null) {
       return null

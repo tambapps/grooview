@@ -4,6 +4,7 @@ import android.os.Looper
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
+import com.tambapps.android.grooview.util.ClassEnhancer
 import com.tambapps.android.grooview.util.FakeViewBuilder
 import com.tambapps.android.grooview.util.MockedObject
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
@@ -33,6 +34,9 @@ class ViewBuilderTest {
     }
     MetaClass.metaClass.respondsTo = { String p ->
       true
+    }
+    ClassEnhancer.metaClass.static.enhanceClasses = { ->
+
     }
   }
 

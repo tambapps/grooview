@@ -1,7 +1,6 @@
 package com.tambapps.android.grooview.util
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.Looper
 import android.view.View
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
@@ -52,14 +51,14 @@ class ViewDecorator {
     }
     if (Looper.getMainLooper().isCurrentThread()) {
       try {
-        InvokerHelper.setProperty(_view, name, newValue)
+        smartSetProperty(_view, name, newValue)
       } catch (Exception e) {
         errorDialog(e)
       }
     } else {
       ((Activity) _view.context).runOnUiThread {
         try {
-          InvokerHelper.setProperty(_view, name, newValue)
+          smartSetProperty(_view, name, newValue)
         } catch (Exception e) {
           errorDialog(e)
         }
@@ -68,10 +67,18 @@ class ViewDecorator {
   }
 
   private void errorDialog(Exception e) {
-    new AlertDialog.Builder(_view.context)
+    // didn't find androidx appcompat dependency so we have to do a little hack
+    Class.forName('androidx.appcompat.app.AlertDialog').newInstance(_view.context)
         .setTitle("An error occured on main thread")
         .setMessage("${e.class.simpleName}: ${e.message}")
         .setPositiveButton("ok", null)
         .show()
+  }
+
+  static void smartSetProperty(Object view, String property, def value) {
+    if (property.endsWith("Color")) {
+      value = Utils.color(value)
+    }
+    InvokerHelper.setProperty(view, property, value)
   }
 }
