@@ -69,7 +69,7 @@ class ViewDecorator {
         .show()
   }
 
-  static void smartSetProperty(Object view, String property, def value) {
+  private static void smartSetProperty(Object view, String property, def value) {
     if (property.endsWith("Color")) {
       value = Utils.color(value)
     }

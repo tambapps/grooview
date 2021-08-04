@@ -181,13 +181,6 @@ class ViewBuilder extends FactoryBuilderSupport {
     }
   }
 
-  @Override
-  protected void setNodeAttributes(Object node, Map attributes) {
-    for (entry in attributes) {
-      ViewDecorator.smartSetProperty(node, entry.key.toString(), entry.value)
-    }
-  }
-
   // useful methods to use when building
 
   def dialog() {
