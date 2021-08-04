@@ -191,11 +191,11 @@ class ViewBuilder extends FactoryBuilderSupport {
   // useful methods to use when building
 
   def dialog() {
-    return Class.forName('androidx.appcompat.app.AlertDialog').newInstance(context)
+    return Class.forName('androidx.appcompat.app.AlertDialog').newInstance(androidContext)
   }
 
   void toast(String text, int length = Toast.LENGTH_SHORT) {
-    Toast.makeText(context, text, length).show()
+    Toast.makeText(androidContext, text, length).show()
   }
 
   Integer color(def data) {
