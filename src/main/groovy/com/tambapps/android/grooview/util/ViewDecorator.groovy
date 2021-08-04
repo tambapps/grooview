@@ -3,7 +3,6 @@ package com.tambapps.android.grooview.util
 import android.app.Activity
 import android.os.Looper
 import android.view.View
-import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
 
 /**
@@ -38,8 +37,11 @@ class ViewDecorator {
   }
 
   def getProperty(String name) {
-    // will not particularly be executed in main thread so no need to check here
-    return name == '_view' ? _view : InvokerHelper.getProperty(_view, name)
+    if (name == '_view') {
+      return _view
+    }
+    def value = InvokerHelper.getProperty(_view, name)
+    return value instanceof View ? new ViewDecorator(value) : value
   }
 
   void setProperty(String name, Object newValue) {
@@ -72,7 +74,36 @@ class ViewDecorator {
   private static void smartSetProperty(Object view, String property, def value) {
     if (property.endsWith("Color")) {
       value = Utils.color(value)
+    } else if (value instanceof Closure) {
+      value = decorateClosure(value)
     }
     InvokerHelper.setProperty(view, property, value)
   }
+
+  // transform view args into ViewDecorator args
+  private static Closure decorateClosure(final Closure closure) {
+    return { Object[] args ->
+      def convertedArgs = args.collect { it instanceof View ? new ViewDecorator(it) : it } as Object[]
+      return closure(*convertedArgs)
+    }
+  }
+
+  @Override
+  boolean equals(Object obj) {
+    if (obj == null) {
+      return null
+    }
+    if (obj instanceof View) {
+      return _view == obj
+    } else if (obj instanceof ViewDecorator) {
+      return _view == obj._view
+    }
+    return super.equals(obj)
+  }
+
+  @Override
+  int hashCode() {
+    return _view.hashCode()
+  }
+
 }

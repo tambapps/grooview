@@ -119,7 +119,7 @@ class ViewBuilderTest {
       textView()
     }
     assertEquals('TextView', result.type)
-    assertEquals(defaultTextViewProperties.onLongClickListener, result.onLongClickListener)
+    assertEquals(defaultTextViewProperties.onLongClickListener(null), result.onLongClickListener(null))
   }
 
   private def build(Closure closure) {
