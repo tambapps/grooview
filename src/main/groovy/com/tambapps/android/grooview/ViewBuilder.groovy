@@ -46,7 +46,9 @@ import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
 import com.tambapps.android.grooview.util.Utils
-import com.tambapps.android.grooview.util.ViewDecorator
+import com.tambapps.android.grooview.view.ObservableCollectionViewDecorator
+import com.tambapps.android.grooview.view.ViewDecorator
+import org.codehaus.groovy.runtime.InvokerHelper
 
 import java.nio.file.Path
 

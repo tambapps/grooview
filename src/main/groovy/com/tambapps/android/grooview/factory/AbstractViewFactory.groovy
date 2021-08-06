@@ -1,7 +1,7 @@
 package com.tambapps.android.grooview.factory
 
 import com.tambapps.android.grooview.util.ContextUtils
-import com.tambapps.android.grooview.util.ViewDecorator
+import com.tambapps.android.grooview.view.ViewDecorator
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
 

@@ -1,6 +1,7 @@
 package com.tambapps.android.grooview.util
 
 import android.view.ViewGroup
+import com.tambapps.android.grooview.view.ViewDecorator
 
 class ClassEnhancer {
 

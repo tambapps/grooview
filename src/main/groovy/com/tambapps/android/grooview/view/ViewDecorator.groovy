@@ -1,8 +1,9 @@
-package com.tambapps.android.grooview.util
+package com.tambapps.android.grooview.view
 
 import android.app.Activity
 import android.os.Looper
 import android.view.View
+import com.tambapps.android.grooview.util.Utils
 import org.codehaus.groovy.runtime.InvokerHelper
 
 /**
