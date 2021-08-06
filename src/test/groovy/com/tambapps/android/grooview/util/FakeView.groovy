@@ -3,7 +3,7 @@ package com.tambapps.android.grooview.util
 import android.view.View
 import android.view.ViewGroup
 
-class MockedObject {
+class FakeView {
 
   Map properties = ['class': View, 'metaClass': ViewGroup.metaClass]
 

@@ -1,7 +1,6 @@
 package com.tambapps.android.grooview.util
 
-import android.view.View
-import android.view.ViewGroup
+
 import com.tambapps.android.grooview.ViewBuilder
 import com.tambapps.android.grooview.factory.ReflectAdapterViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewFactory
@@ -35,7 +34,7 @@ class FakeViewBuilder extends ViewBuilder {
   }
 
   private static Object newFakeView(Class clazz) {
-    def o = new MockedObject()
+    def o = new FakeView()
     //o.type = delegate.class.simpleName - 'Factory'
     o.type = clazz.simpleName
     return o

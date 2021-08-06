@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.tambapps.android.grooview.util.ClassEnhancer
 import com.tambapps.android.grooview.util.FakeViewBuilder
-import com.tambapps.android.grooview.util.MockedObject
+import com.tambapps.android.grooview.util.FakeView
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class ViewBuilderTest {
 
   private static final AtomicInteger ID_GENERATOR = new AtomicInteger()
 
-  private MockedObject root = new MockedObject().with {
+  private FakeView root = new FakeView().with {
     type = "ViewGroup"
     it
   }
@@ -132,7 +132,7 @@ class ViewBuilderTest {
     assertEquals("ListView", result.type)
     def adapter = result.adapter
     for (i in 0..<data.size()) {
-      assertEquals(data[i], adapter.getView(i, null, new MockedObject()).text)
+      assertEquals(data[i], adapter.getView(i, null, new FakeView()).text)
     }
   }
   private def build(Closure closure) {
