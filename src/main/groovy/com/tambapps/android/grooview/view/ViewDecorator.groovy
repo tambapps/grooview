@@ -49,14 +49,17 @@ class ViewDecorator {
   void setProperty(String name, Object newValue) {
     if (Looper.getMainLooper().isCurrentThread()) {
       try {
-        smartSetProperty(_view, name, newValue)
+        // ignore IntelIJ warning. THIS IS IMPORTANT!
+        ViewDecorator.smartSetProperty(_view, name, newValue)
       } catch (Exception e) {
         errorDialog(e)
       }
     } else {
       ((Activity) _view.context).runOnUiThread {
         try {
-          smartSetProperty(_view, name, newValue)
+          // ignore IntelIJ warning. THIS IS IMPORTANT for differentiating static method call from
+          // instance method call
+          ViewDecorator.smartSetProperty(_view, name, newValue)
         } catch (Exception e) {
           errorDialog(e)
         }
