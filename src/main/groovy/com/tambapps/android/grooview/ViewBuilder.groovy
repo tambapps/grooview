@@ -183,8 +183,24 @@ class ViewBuilder extends FactoryBuilderSupport {
 
   // useful methods to use when building
 
-  def dialog() {
-    return Class.forName('androidx.appcompat.app.AlertDialog').newInstance(androidContext)
+  def dialog(Map args) {
+    def dialogBuilder = Class.forName('androidx.appcompat.app.AlertDialog$Builder').newInstance(androidContext)
+    if (args.title) {
+      dialogBuilder.setTitle(args.title)
+    }
+    if (args.message) {
+      dialogBuilder.setMessage(args.message)
+    }
+    if (args.negativeButton) {
+      dialogBuilder.setNegativeButton(args.negativeButton, null)
+    }
+    if (args.neutralButton) {
+      dialogBuilder.setNeutralButton(args.neutralButton, null)
+    }
+    if (args.positiveButton) {
+      dialogBuilder.setPositiveButton(args.positiveButton, null)
+    }
+    return dialogBuilder
   }
 
   void toast(String text, int length = Toast.LENGTH_SHORT) {
