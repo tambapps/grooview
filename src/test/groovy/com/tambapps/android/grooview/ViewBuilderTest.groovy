@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.tambapps.android.grooview.util.ClassEnhancer
 import com.tambapps.android.grooview.util.FakeViewBuilder
 import com.tambapps.android.grooview.util.MockedObject
-import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -42,8 +41,8 @@ class ViewBuilderTest {
     def result = build {
       view()
     }
-    assertEquals(result.type, 'View')
-    assertEquals(result.properties, [:])
+    assertEquals('View', result.type)
+    assertEquals([:], result.properties)
   }
 
   @Test
@@ -51,8 +50,8 @@ class ViewBuilderTest {
     def result = build {
       view(visibility: visible)
     }
-    assertEquals(result.type, "View")
-    assertEquals(result.visibility, View.VISIBLE)
+    assertEquals("View", result.type)
+    assertEquals(View.VISIBLE, result.visibility)
   }
 
   @Test
@@ -60,8 +59,8 @@ class ViewBuilderTest {
     def result = build {
       view(alpha: 1.234)
     }
-    assertEquals(result.type, "View")
-    assertEquals(result.alpha, 1.234)
+    assertEquals("View", result.type)
+    assertEquals(1.234, result.alpha)
   }
 
   @Test
@@ -69,7 +68,7 @@ class ViewBuilderTest {
     def result = build {
       view(onLongClickListener: { true })
     }
-    assertEquals(result.type, "View")
+    assertEquals("View", result.type)
     assertNotNull(result.onLongClickListener)
     assertTrue(result.onLongClickListener(null))
   }
@@ -85,8 +84,8 @@ class ViewBuilderTest {
         }
       }
     }
-    assertEquals(result.type, "LinearLayout")
-    assertEquals(result.visibility, View.GONE)
+    assertEquals("LinearLayout", result.type)
+    assertEquals(View.GONE, result.visibility)
     assertEquals(3, result.children.size())
     def nestedLinearLayout = result.children[2]
     assertEquals(5, nestedLinearLayout.children.size())
@@ -130,7 +129,7 @@ class ViewBuilderTest {
         textView(text: it)
       }
     }
-    assertEquals(result.type, "ListView")
+    assertEquals("ListView", result.type)
     def adapter = result.adapter
     for (i in 0..<data.size()) {
       assertEquals(data[i], adapter.getView(i, null, new MockedObject()).text)
