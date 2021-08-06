@@ -10,4 +10,9 @@ class ReflectViewGroupFactory extends ReflectViewFactory {
     return false
   }
 
+  @Override
+  void onNodeCompleted(FactoryBuilderSupport builder, Object parent, Object node) {
+    parent.addView(node)
+  }
+
 }

@@ -166,8 +166,14 @@ class ViewBuilder extends FactoryBuilderSupport {
 
   @Override
   protected void nodeCompleted(Object parent, Object node) {
-    (parent ?: root).addView(node)
-    super.nodeCompleted(parent, node)
+    Factory parentFactory = getProxyBuilder().getParentFactory()
+    if (parentFactory != null) {
+      // the parent factory will be responsible of adding the child view to parent
+      // allowing to handle custom behaviours (e.g AdapterViews)
+      parentFactory.onNodeCompleted(getProxyBuilder().getChildBuilder(), parent, node)
+    } else {
+      root.addView(node)
+    }
   }
 
   @Override
