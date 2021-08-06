@@ -52,11 +52,7 @@ class ClosureViewAdapter extends BaseAdapter {
 
   @Override
   View getView(int i, View convertView, ViewGroup parent) {
-    if (convertView != null) {
-      return convertView
-    }
-    def newView = createView(getItem(i))
-    parent.addView(newView)
-    return newView
+    // the parent is the ListView. So is normal we don't ListView.addView(createdView)
+    return convertView ?: createView(getItem(i))
   }
 }
