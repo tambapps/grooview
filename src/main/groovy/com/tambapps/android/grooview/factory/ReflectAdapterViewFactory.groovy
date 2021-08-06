@@ -2,7 +2,6 @@ package com.tambapps.android.grooview.factory
 
 import com.tambapps.android.grooview.view.ClosureViewAdapter
 import com.tambapps.android.grooview.view.ObservableCollectionViewDecorator
-import com.tambapps.android.grooview.view.ViewDecorator
 import groovy.transform.InheritConstructors
 
 @InheritConstructors
@@ -19,7 +18,7 @@ class ReflectAdapterViewFactory extends ReflectViewGroupFactory {
   }
 
   @Override
-  protected void handleAdditionalNodeAttributes(FactoryBuilderSupport builder, ObjectPropertySetter setter, Map attributes) {
+  protected void handleAdditionalNodeAttributes(FactoryBuilderSupport builder, AbstractViewFactory.ObjectPropertySetter setter, Map attributes) {
     setter.with {
       handleProperty("items", "_items", Collection)
     }
