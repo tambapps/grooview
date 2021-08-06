@@ -135,6 +135,24 @@ class ViewBuilderTest {
       assertEquals(data[i], adapter.getView(i, null, new FakeView()).text)
     }
   }
+  @Test
+  void testListViewWithParent() {
+    def data = ["Hello", "World", "!"]
+    def result = build {
+      linearLayout() {
+        listView(items: data) {
+          textView(text: it)
+        }
+      }
+    }
+    result = result.children[0]
+    assertEquals("ListView", result.type)
+    def adapter = result.adapter
+    for (i in 0..<data.size()) {
+      assertEquals(data[i], adapter.getView(i, null, new FakeView()).text)
+    }
+  }
+
   private def build(Closure closure) {
     return Grooview.start(new FakeViewBuilder(root), closure)
   }
