@@ -2,6 +2,7 @@ package com.tambapps.android.grooview.view
 
 import android.app.Activity
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import com.tambapps.android.grooview.util.Utils
 import org.codehaus.groovy.runtime.InvokerHelper
@@ -65,8 +66,9 @@ class ViewDecorator {
 
   private void errorDialog(Exception e) {
     // didn't find androidx appcompat dependency so we have to do a little hack
-    Class.forName('androidx.appcompat.app.AlertDialog').newInstance(_view.context)
-        .setTitle("An error occured on main thread")
+    Log.e("Grooview", "error on main thread", e)
+    Class.forName('androidx.appcompat.app.AlertDialog$Builder').newInstance(_view.context)
+        .setTitle("An error occurred on main thread")
         .setMessage("${e.class.simpleName}: ${e.message}")
         .setPositiveButton("ok", null)
         .show()
