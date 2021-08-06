@@ -122,6 +122,20 @@ class ViewBuilderTest {
     assertEquals(defaultTextViewProperties.onLongClickListener(null), result.onLongClickListener(null))
   }
 
+  @Test
+  void testListView() {
+    def data = ["Hello", "World", "!"]
+    def result = build {
+      listView(items: data) {
+        textView(text: it)
+      }
+    }
+    assertEquals(result.type, "ListView")
+    def adapter = result.adapter
+    for (i in 0..<data.size()) {
+      assertEquals(data[i], adapter.getView(i, null, new MockedObject()).text)
+    }
+  }
   private def build(Closure closure) {
     return Grooview.start(new FakeViewBuilder(root), closure)
   }

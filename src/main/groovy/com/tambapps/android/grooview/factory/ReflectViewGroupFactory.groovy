@@ -15,4 +15,8 @@ class ReflectViewGroupFactory extends ReflectViewFactory {
     parent.addView(node)
   }
 
+
+  void callChildClosure(Closure closure, Object node) {
+    closure.call()
+  }
 }

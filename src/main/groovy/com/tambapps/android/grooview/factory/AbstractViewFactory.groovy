@@ -16,12 +16,17 @@ abstract class AbstractViewFactory extends AbstractFactory {
   @Override
   Object newInstance(FactoryBuilderSupport builder, Object name, Object value,
       Map attributes) throws InstantiationException, IllegalAccessException {
-    return new ViewDecorator(newInstance(context))
+    return newViewDecorator(newInstance(context))
+  }
+
+  protected def newViewDecorator(Object view) {
+    return new ViewDecorator(view)
   }
 
   @Override
   boolean onHandleNodeAttributes(FactoryBuilderSupport builder, Object node, Map attributes) {
-    new ObjectPropertySetter(builder, node, attributes).with {
+    def setter = new ObjectPropertySetter(builder, node, attributes)
+    setter.with {
       def defaultProperties = getDefaultProperties(builder)
       if (defaultProperties) {
         for (entry in defaultProperties) {
@@ -56,7 +61,14 @@ abstract class AbstractViewFactory extends AbstractFactory {
       if (paddingBottom) view.setPadding(view.paddingStart, view.paddingTop, view.paddingEnd, paddingBottom)
       it
     }
+    handleAdditionalNodeAttributes(builder, setter, attributes)
     return true
+  }
+
+  protected void handleAdditionalNodeAttributes(FactoryBuilderSupport builder,
+                                                ObjectPropertySetter setter,
+                                                Map attributes) {
+
   }
 
   // should return a View but we're using Object type for testing purpose
@@ -86,7 +98,11 @@ abstract class AbstractViewFactory extends AbstractFactory {
       handleProperty(propertyName, propertyName, converter)
     }
 
-    void handleProperty(String mapPropertyName, String objectPropertyName, Closure converter = CLOSURE_CONFIGURER) {
+    void handleProperty(String mapPropertyName, String objectPropertyName, Class<?> clazz) {
+      handleProperty(mapPropertyName, objectPropertyName) { DefaultGroovyMethods.asType(it, clazz) }
+    }
+
+    void handleProperty(String mapPropertyName, String objectPropertyName, Closure converter) {
       def value = attributes.remove(mapPropertyName)
       if (value != null) {
         InvokerHelper.setProperty(view, objectPropertyName, converter(value))
