@@ -47,13 +47,11 @@ import com.tambapps.android.grooview.factory.ReflectViewFactory
 import com.tambapps.android.grooview.factory.ReflectViewGroupFactory
 import com.tambapps.android.grooview.util.IdMapper
 import com.tambapps.android.grooview.util.Utils
-import com.tambapps.android.grooview.view.ObservableCollectionViewDecorator
 import com.tambapps.android.grooview.view.ViewDecorator
 import org.codehaus.groovy.runtime.InvokerHelper
 
 import java.nio.file.Path
 
-// TODO listeners are executed in main thread
 class ViewBuilder extends FactoryBuilderSupport {
 
   final Object androidContext
@@ -158,10 +156,12 @@ class ViewBuilder extends FactoryBuilderSupport {
     return new ReflectAdapterViewFactory(androidContext, clazz)
   }
 
+  // don't delete me, I am used by AbstractViewFactory
   int generateId(String name, Object view) {
     return idMapper.generateId(name, view)
   }
 
+  // don't delete me, I am used by AbstractViewFactory
   Integer toViewId(Object data) {
     if (data == null) return null
     switch (data) {

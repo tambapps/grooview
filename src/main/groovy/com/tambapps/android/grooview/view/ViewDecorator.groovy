@@ -9,9 +9,11 @@ import org.codehaus.groovy.runtime.InvokerHelper
 
 /**
  * Decorator object that will executed underlying view method property calls in UI thread
+ * Properties starting with '_' are treated as additional properties
  */
 class ViewDecorator {
   private final _view
+  private final Map additionalProperties = [:]
 
   ViewDecorator(_view) {
     this._view = _view
@@ -43,12 +45,18 @@ class ViewDecorator {
   def getProperty(String name) {
     if (name == '_view') {
       return _view
+    } else if (name.startsWith('_')) {
+      return additionalProperties[name]
     }
     def value = InvokerHelper.getProperty(_view, name)
     return value instanceof View ? new ViewDecorator(value) : value
   }
 
   void setProperty(String name, Object newValue) {
+    if (name.startsWith('_')) {
+      additionalProperties[name] = newValue
+      return
+    }
     if (Looper.getMainLooper().isCurrentThread()) {
       try {
         // ignore IntelIJ warning. THIS IS IMPORTANT!
