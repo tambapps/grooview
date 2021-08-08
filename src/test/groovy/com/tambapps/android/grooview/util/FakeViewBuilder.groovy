@@ -76,20 +76,30 @@ class FakeViewBuilder extends ViewBuilder {
     }
 
     @Override
-    void callChildClosure(Closure closure, /*ObservableCollectionViewDecorator*/Object node) {
-      node.adapter = (new FakeClosureViewAdapter(node._items, closure))
+    void callChildClosure(ViewBuilder builder, Closure closure, Object node) {
+      node.adapter = (new FakeClosureViewAdapter(builder, node._items, closure))
     }
   }
 
   static class FakeClosureViewAdapter {
 
+    private final ViewBuilder builder
+    private final def parentContext
+    private final def parentName
+    private final def parentNode
+    private final def parentFactory
     // note: can also be a simple collection, it just won't be updated
     // in case changes are made
     def/*ObservableList|ObservableSet|ObservableMap*/ items
     Closure createViewClosure
 
-    FakeClosureViewAdapter(items, Closure createViewClosure) {
+    FakeClosureViewAdapter(ViewBuilder builder, items, Closure createViewClosure) {
+      this.builder = builder
       this.items = items
+      this.parentContext = builder.parentContext
+      this.parentName = builder.parentName
+      this.parentNode = builder.parentNode
+      this.parentFactory = builder.parentFactory
       this.createViewClosure = createViewClosure
       if ((items instanceof ObservableList) || (items instanceof ObservableSet) ||
           (items instanceof ObservableMap)) {
@@ -127,13 +137,18 @@ class FakeViewBuilder extends ViewBuilder {
 
     private def createView(int i) {
       def item = getItem(i)
-      switch (createViewClosure.maximumNumberOfParameters) {
-        case 2:
-          return createViewClosure(item, i)
-        case 3:
-          return createViewClosure(item, i, items)
-        default:
-          return createViewClosure(item)
+      builder.newAdapterContext(createViewClosure, parentContext, parentName, parentNode, parentFactory)
+      try {
+        switch (createViewClosure.maximumNumberOfParameters) {
+          case 2:
+            return createViewClosure(item, i)
+          case 3:
+            return createViewClosure(item, i, items)
+          default:
+            return createViewClosure(item)
+        }
+      } finally {
+        builder.popContext()
       }
     }
   }

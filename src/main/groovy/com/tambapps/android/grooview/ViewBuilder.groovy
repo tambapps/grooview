@@ -275,7 +275,7 @@ class ViewBuilder extends FactoryBuilderSupport {
             // lets register the builder as the delegate
             getProxyBuilder().setClosureDelegate(closure, node);
             // see ReflectViewGroupFactory.callChildClosure
-            parentFactory.callChildClosure(closure, node)
+            parentFactory.callChildClosure(this, closure, node)
           } finally {
             getProxyBuilder().popContext();
           }
@@ -340,5 +340,22 @@ class ViewBuilder extends FactoryBuilderSupport {
       default:
         throw new IllegalArgumentException("Cannot convert object of type ${data.class.simpleName} to Drawable")
     }
+  }
+
+  @Override
+  Map<String, Object> popContext() {
+    return super.popContext()
+  }
+
+  void newAdapterContext(Closure closure, def parentContext, def parentName, def parentNode, def parentFactory) {
+    newContext()
+    def context = context
+    context[OWNER] = closure.getOwner()
+    context[PARENT_FACTORY] = parentFactory
+    context[PARENT_NODE] = parentNode
+    context[PARENT_CONTEXT] = parentContext
+    context[PARENT_NAME] = parentName
+    context[PARENT_BUILDER] = parentContext?.get(CURRENT_BUILDER)
+    context[CURRENT_BUILDER] = this
   }
 }

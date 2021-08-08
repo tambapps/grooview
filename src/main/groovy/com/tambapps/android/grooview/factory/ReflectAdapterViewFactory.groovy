@@ -1,5 +1,6 @@
 package com.tambapps.android.grooview.factory
 
+import com.tambapps.android.grooview.ViewBuilder
 import com.tambapps.android.grooview.view.ClosureViewAdapter
 import com.tambapps.android.grooview.view.ObservableCollectionViewDecorator
 import groovy.transform.InheritConstructors
@@ -8,8 +9,8 @@ import groovy.transform.InheritConstructors
 class ReflectAdapterViewFactory extends ReflectViewGroupFactory {
 
   @Override
-  void callChildClosure(Closure closure, /*ObservableCollectionViewDecorator*/Object node) {
-    node.setAdapter(new ClosureViewAdapter(node._items, closure))
+  void callChildClosure(ViewBuilder builder, Closure closure, /*ObservableCollectionViewDecorator*/ Object node) {
+    node.setAdapter(new ClosureViewAdapter(builder, node._items, closure))
   }
 
   @Override
@@ -26,7 +27,6 @@ class ReflectAdapterViewFactory extends ReflectViewGroupFactory {
 
   @Override
   void onNodeCompleted(FactoryBuilderSupport builder, Object parent, Object node) {
-    // do not add the view. this method shouldn't be called anyway
-    throw new RuntimeException("This method shouldn't have been called")
+    // do not add the view, because adapter views don't have actual children
   }
 }

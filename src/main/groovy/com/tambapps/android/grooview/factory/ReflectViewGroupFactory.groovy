@@ -1,5 +1,6 @@
 package com.tambapps.android.grooview.factory
 
+import com.tambapps.android.grooview.ViewBuilder
 import groovy.transform.InheritConstructors
 
 @InheritConstructors
@@ -16,7 +17,7 @@ class ReflectViewGroupFactory extends ReflectViewFactory {
   }
 
 
-  void callChildClosure(Closure closure, Object node) {
+  void callChildClosure(ViewBuilder builder, Closure closure, Object node) {
     closure.call()
   }
 }
