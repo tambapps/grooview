@@ -86,11 +86,11 @@ class FakeViewBuilder extends ViewBuilder {
     // note: can also be a simple collection, it just won't be updated
     // in case changes are made
     def/*ObservableList|ObservableSet|ObservableMap*/ items
-    Closure createView
+    Closure createViewClosure
 
-    FakeClosureViewAdapter(items, Closure createView) {
+    FakeClosureViewAdapter(items, Closure createViewClosure) {
       this.items = items
-      this.createView = createView
+      this.createViewClosure = createViewClosure
       if ((items instanceof ObservableList) || (items instanceof ObservableSet) ||
           (items instanceof ObservableMap)) {
         items.addPropertyChangeListener(new PropertyChangeListener() {
@@ -122,7 +122,19 @@ class FakeViewBuilder extends ViewBuilder {
     }
 
     def getView(int i, def convertView, def parent) {
-      return convertView ?: createView(getItem(i))
+      return convertView ?: createView(i)
+    }
+
+    private def createView(int i) {
+      def item = getItem(i)
+      switch (createViewClosure.maximumNumberOfParameters) {
+        case 2:
+          return createViewClosure(item, i)
+        case 3:
+          return createViewClosure(item, i, items)
+        default:
+          return createViewClosure(item)
+      }
     }
   }
 }

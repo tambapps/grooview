@@ -135,6 +135,37 @@ class ViewBuilderTest {
       assertEquals(data[i], adapter.getView(i, null, new FakeView()).text)
     }
   }
+
+  @Test
+  void testListViewTwoParameter() {
+    def data = ["Hello", "World", "!"]
+    def result = build {
+      listView(items: data) { item, i ->
+        textView(text: "$item $i")
+      }
+    }
+    assertEquals("ListView", result.type)
+    def adapter = result.adapter
+    for (i in 0..<data.size()) {
+      assertEquals("${data[i]} $i", adapter.getView(i, null, new FakeView()).text)
+    }
+  }
+
+  @Test
+  void testListViewThreeParameter() {
+    def data = ["Hello", "World", "!"]
+    def result = build {
+      listView(items: data) { item, i, items ->
+        textView(text: "$item $i $items")
+      }
+    }
+    assertEquals("ListView", result.type)
+    def adapter = result.adapter
+    for (i in 0..<data.size()) {
+      assertEquals("${data[i]} $i $data", adapter.getView(i, null, new FakeView()).text)
+    }
+  }
+
   @Test
   void testListViewWithParent() {
     def data = ["Hello", "World", "!"]
