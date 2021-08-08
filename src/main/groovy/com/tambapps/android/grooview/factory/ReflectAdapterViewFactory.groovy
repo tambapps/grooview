@@ -21,7 +21,13 @@ class ReflectAdapterViewFactory extends ReflectViewGroupFactory {
   @Override
   protected void handleAdditionalNodeAttributes(FactoryBuilderSupport builder, AbstractViewFactory.ObjectPropertySetter setter, Map attributes) {
     setter.with {
-      handleProperty("items", "_items", Collection)
+      handleProperty("items", "_items") {
+        if ((it instanceof Map) || (it instanceof Collection)) {
+          return it
+        } else {
+          throw new IllegalArgumentException("Cannot handle argument $it for ${viewClass.simpleName} items (need to be a collection or a map)")
+        }
+      }
     }
   }
 

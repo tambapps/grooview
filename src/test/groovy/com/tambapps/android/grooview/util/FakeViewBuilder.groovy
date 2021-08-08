@@ -123,7 +123,7 @@ class FakeViewBuilder extends ViewBuilder {
       // for Set/Map
       def iterator = items.iterator()
       def result = iterator.next()
-      for (j in 1..<i) result = iterator.next()
+      for (j in 0..<i) result = iterator.next()
       return result
     }
 

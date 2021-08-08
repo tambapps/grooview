@@ -137,6 +137,41 @@ class ViewBuilderTest {
   }
 
   @Test
+  void testListViewSet() {
+    def data = new LinkedHashSet(["Hello", "World", "!"])
+    def result = build {
+      listView(items: data) {
+        textView(text: it)
+      }
+    }
+    assertEquals("ListView", result.type)
+    def adapter = result.adapter
+    def iterator = data.iterator()
+    for (i in 0..<data.size()) {
+      assertEquals(iterator.next(), adapter.getView(i, null, new FakeView()).text)
+    }
+  }
+
+  @Test
+  void testListViewMap() {
+    def data = new LinkedHashMap()
+    data['one'] = "Hello"
+    data['two'] = "World"
+    data['three'] = "!"
+    def result = build {
+      listView(items: data) {
+        textView(text: it)
+      }
+    }
+    assertEquals("ListView", result.type)
+    def adapter = result.adapter
+    def iterator = data.iterator()
+    for (i in 0..<data.size()) {
+      assertEquals(iterator.next(), adapter.getView(i, null, new FakeView()).text)
+    }
+  }
+
+  @Test
   void testListViewTwoParameter() {
     def data = ["Hello", "World", "!"]
     def result = build {
