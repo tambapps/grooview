@@ -25,14 +25,16 @@ class ViewDecorator {
       try {
         return InvokerHelper.invokeMethod(_view, name, convertedArgs)
       } catch (Exception e) {
-        errorDialog(e)
+        // ignore IntelIJ warning. THIS IS IMPORTANT for differentiating static method call from
+        ViewDecorator.errorDialog(_view, e)
       }
     } else {
       ((Activity) _view.context).runOnUiThread {
         try {
           InvokerHelper.invokeMethod(_view, name, convertedArgs)
         } catch(Exception e) {
-          errorDialog(e)
+          // ignore IntelIJ warning
+          ViewDecorator.errorDialog(_view, e)
         }
       }
     }
@@ -52,7 +54,8 @@ class ViewDecorator {
         // ignore IntelIJ warning. THIS IS IMPORTANT!
         ViewDecorator.smartSetProperty(_view, name, newValue)
       } catch (Exception e) {
-        errorDialog(e)
+        // ignore IntelIJ warning
+        ViewDecorator.errorDialog(_view, e)
       }
     } else {
       ((Activity) _view.context).runOnUiThread {
@@ -61,13 +64,14 @@ class ViewDecorator {
           // instance method call
           ViewDecorator.smartSetProperty(_view, name, newValue)
         } catch (Exception e) {
-          errorDialog(e)
+          // ignore IntelIJ warning
+          ViewDecorator.errorDialog(_view, e)
         }
       }
     }
   }
 
-  private void errorDialog(Exception e) {
+  private static void errorDialog(def _view, Exception e) {
     // didn't find androidx appcompat dependency so we have to do a little hack
     Log.e("Grooview", "error on main thread", e)
     Class.forName('androidx.appcompat.app.AlertDialog$Builder').newInstance(_view.context)
