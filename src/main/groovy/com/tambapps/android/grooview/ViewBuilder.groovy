@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.AbsSeekBar
 import android.widget.AbsSpinner
@@ -73,6 +74,8 @@ class ViewBuilder extends FactoryBuilderSupport {
   }
 
   private void initialize() {
+    setVariable("match_parent", ViewGroup.LayoutParams.MATCH_PARENT)
+    setVariable("wrap_content", ViewGroup.LayoutParams.WRAP_CONTENT)
     setVariable("vertical", LinearLayout.VERTICAL)
     setVariable("horizontal", LinearLayout.HORIZONTAL)
     setVariable("visible", View.VISIBLE)

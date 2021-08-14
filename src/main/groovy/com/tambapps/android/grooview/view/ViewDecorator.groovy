@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import com.tambapps.android.grooview.util.LayoutParamsUtils
 import com.tambapps.android.grooview.util.Utils
 import org.codehaus.groovy.runtime.InvokerHelper
 
@@ -47,9 +48,15 @@ class ViewDecorator {
       return _view
     } else if (name.startsWith('_')) {
       return additionalProperties[name]
+    } else if (name == 'additionalProperties') {
+      return additionalProperties
     }
     def value = InvokerHelper.getProperty(_view, name)
     return value instanceof View ? new ViewDecorator(value) : value
+  }
+
+  void setLayoutParamsProperty(String name, Object value) {
+    additionalProperties[LayoutParamsUtils.LAYOUT_PARAMS_ATTRIBUTE_PREFIX + name] = value
   }
 
   void setProperty(String name, Object newValue) {
@@ -77,6 +84,16 @@ class ViewDecorator {
         }
       }
     }
+  }
+
+  /**
+   * Methods used for ViewGroups. It will add the chieldView in its own _view(Group). It will also
+   * generate the right layout params
+   * @param view
+   */
+  void addView(def childView) {
+    _view.addView(childView)
+    LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
   }
 
   private static void errorDialog(def _view, Exception e) {

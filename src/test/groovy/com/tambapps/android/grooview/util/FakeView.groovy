@@ -5,10 +5,10 @@ import android.view.ViewGroup
 
 class FakeView {
 
-  Map properties = ['class': View, 'metaClass': ViewGroup.metaClass]
+  Map properties = ['class': View, 'metaClass': ViewGroup.metaClass, layoutParams: [:]]
 
   def getProperty(String name) {
-    return properties[name] != null ? properties[name] : [:]
+    return properties[name]
   }
 
   void setProperty(String name, Object newValue) {

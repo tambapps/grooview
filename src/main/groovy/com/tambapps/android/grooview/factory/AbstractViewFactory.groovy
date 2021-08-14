@@ -44,21 +44,21 @@ abstract class AbstractViewFactory extends AbstractFactory {
       }
 
       // handling padding
-      def paddings = (attributes['padding'] as List)
+      def paddings = (attributes.remove('padding') as List)
       if (paddings != null) {
         if (paddings.size() != 4) {
-          throw new IllegalArgumentException("Padding should have 4 values: left, top, right bottom")
+          throw new IllegalArgumentException("Padding should have 4 values: left, top, right and bottom")
         }
         view.setPadding(*(paddings.collect {it as int}))
       }
-      def paddingStart = (attributes['paddingStart'] ?: attributes['paddingLeft']) as Integer
-      if (paddingStart) view.setPadding(paddingStart, view.paddingTop, view.paddingEnd, view.paddingBottom)
-      def paddingTop = attributes['paddingTop'] as Integer
-      if (paddingTop) view.setPadding(view.paddingStart, paddingTop, view.paddingEnd, view.paddingBottom)
-      def paddingEnd = (attributes['paddingEnd'] ?: attributes['paddingRight']) as Integer
-      if (paddingEnd) view.setPadding(view.paddingStart, view.paddingTop, paddingEnd, view.paddingBottom)
-      def paddingBottom = attributes['paddingBottom'] as Integer
-      if (paddingBottom) view.setPadding(view.paddingStart, view.paddingTop, view.paddingEnd, paddingBottom)
+      def paddingStart = (attributes.remove('paddingStart') ?: attributes.remove('paddingLeft')) as Integer
+      if (paddingStart != null) view.setPadding(paddingStart, view.paddingTop, view.paddingEnd, view.paddingBottom)
+      def paddingTop = attributes.remove('paddingTop') as Integer
+      if (paddingTop != null) view.setPadding(view.paddingStart, paddingTop, view.paddingEnd, view.paddingBottom)
+      def paddingEnd = (attributes.remove('paddingEnd') ?: attributes.remove('paddingRight')) as Integer
+      if (paddingEnd != null) view.setPadding(view.paddingStart, view.paddingTop, paddingEnd, view.paddingBottom)
+      def paddingBottom = attributes.remove('paddingBottom') as Integer
+      if (paddingBottom != null) view.setPadding(view.paddingStart, view.paddingTop, view.paddingEnd, paddingBottom)
       it
     }
     handleAdditionalNodeAttributes(builder, setter, attributes)
@@ -88,6 +88,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
       this.delegate = delegate
       this.view = view
       this.attributes = attributes
+      transformLayoutParamsProperties()
     }
 
     void handleProperty(String propertyName, Class<?> clazz) {
@@ -108,11 +109,26 @@ abstract class AbstractViewFactory extends AbstractFactory {
         InvokerHelper.setProperty(view, objectPropertyName, converter(value))
       }
     }
-  }
 
-  @Override
-  void setParent(FactoryBuilderSupport builder, Object parent, Object child) {
-    super.setParent(builder, parent, child)
+    private void transformLayoutParamsProperties() {
+      transformLayoutParamsProperty('width')
+      transformLayoutParamsProperty('height')
+      transformLayoutParamsProperty('margin')
+      transformLayoutParamsProperty('marginStart')
+      transformLayoutParamsProperty('marginLeft')
+      transformLayoutParamsProperty('marginTop')
+      transformLayoutParamsProperty('marginEnd')
+      transformLayoutParamsProperty('marginRight')
+      transformLayoutParamsProperty('marginBottom')
+      transformLayoutParamsProperty('rules')
+    }
+
+    private void transformLayoutParamsProperty(String propertyName) {
+      def value = attributes.remove(propertyName)
+      if (value != null) {
+        view.setLayoutParamsProperty(propertyName, value)
+      }
+    }
   }
 
   protected Map getDefaultProperties(FactoryBuilderSupport builder) {

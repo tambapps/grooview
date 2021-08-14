@@ -3,6 +3,7 @@ package com.tambapps.android.grooview
 import android.os.Looper
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.tambapps.android.grooview.util.ClassEnhancer
 import com.tambapps.android.grooview.util.FakeViewBuilder
@@ -42,7 +43,6 @@ class ViewBuilderTest {
       view()
     }
     assertEquals('View', result.type)
-    assertEquals([:], result.properties)
   }
 
   @Test
@@ -219,6 +219,14 @@ class ViewBuilderTest {
     }
   }
 
+  @Test
+  void testLayoutParamProperty() {
+    def result = build {
+      view(width: match_parent)
+    }
+    assertEquals("View", result.type)
+    assertEquals([width: ViewGroup.LayoutParams.MATCH_PARENT], result.layoutParams)
+  }
   private def build(Closure closure) {
     return Grooview.start(new FakeViewBuilder(root), closure)
   }
