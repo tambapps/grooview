@@ -92,8 +92,25 @@ class ViewDecorator {
    * @param view
    */
   void addView(def childView) {
-    invokeMethod('addView', childView)
-    LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
+    if (Looper.getMainLooper().isCurrentThread()) {
+      try {
+        _view.addView(childView._view)
+        LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
+      } catch (Exception e) {
+        // ignore IntelIJ warning. THIS IS IMPORTANT for differentiating static method call from
+        ViewDecorator.errorDialog(_view, e)
+      }
+    } else {
+      ((Activity) _view.context).runOnUiThread {
+        try {
+          _view.addView(childView._view)
+          LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
+        } catch(Exception e) {
+          // ignore IntelIJ warning
+          ViewDecorator.errorDialog(_view, e)
+        }
+      }
+    }
   }
 
   private static void errorDialog(def _view, Exception e) {
