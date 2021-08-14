@@ -127,6 +127,14 @@ class ViewBuilder extends FactoryBuilderSupport {
     registerViewClass(TimePicker)
     registerViewClass(ToggleButton)
     registerViewClass(VideoView)
+
+    // FloatingActionButton
+    try {
+      def fabClass = Class.forName('com.google.android.material.floatingactionbutton.FloatingActionButton')
+      def fabFactory = newReflectViewFactory(fabClass)
+      registerFactory('fab', fabFactory)
+      registerFactory('floatingActionButton', fabFactory)
+    } catch (ClassNotFoundException ignored) { }
   }
 
   private void registerViewClass(Class clazz) {
