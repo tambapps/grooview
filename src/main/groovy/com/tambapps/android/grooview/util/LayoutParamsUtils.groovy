@@ -1,5 +1,8 @@
 package com.tambapps.android.grooview.util
 
+import android.view.View
+import com.tambapps.android.grooview.view.ViewDecorator
+
 final class LayoutParamsUtils {
 
   static final String LAYOUT_PARAMS_ATTRIBUTE_PREFIX = "layoutParams_"
@@ -31,10 +34,20 @@ final class LayoutParamsUtils {
     def marginBottom = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginBottom') as Integer
     if (marginBottom != null) layoutParams.bottomMargin = marginBottom
 
+    // TODO document relative layout rules
+    //  rules are a List<Integer|Map<Integer, Object>, meaning a list of verbs (e.g RelativeLayout.ALIGN_RIGHT)
+    //  and/or a mapping between a verb and a view/view id
     // relative layout rules
-    def rules = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'rules')?.collect { it as Integer }
+    def rules = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'rules')
     for (rule in rules) {
-      layoutParams.addRule(rule)
+      if (rule instanceof Map) {
+        for (subjectedRule in rule) {
+          layoutParams.addRule(subjectedRule.key,
+              (subjectedRule.value instanceof ViewDecorator) || (subjectedRule.value instanceof View) ? subjectedRule.value.id : subjectedRule.value as Integer)
+        }
+      } else {
+        layoutParams.addRule(rule as Integer)
+      }
     }
   }
 }

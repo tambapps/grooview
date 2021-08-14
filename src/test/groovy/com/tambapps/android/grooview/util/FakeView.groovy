@@ -5,7 +5,7 @@ import android.view.ViewGroup
 
 class FakeView {
 
-  Map properties = ['class': View, 'metaClass': ViewGroup.metaClass, layoutParams: [:]]
+  Map properties = ['class': View, 'metaClass': ViewGroup.metaClass, layoutParams: new FakeLayoutParams()]
 
   def getProperty(String name) {
     return properties[name]
@@ -70,5 +70,19 @@ class FakeView {
 
   Object getBackgroundColor() {
     return properties['backgroundColor']
+  }
+
+  private static class FakeLayoutParams extends HashMap {
+    private final List rules = []
+
+    void addRule(int verb) {
+      rules.add(verb)
+      if (!containsKey('rules')) put('rules', rules)
+    }
+
+    void addRule(int verb, int subject) {
+      rules.add([(verb): subject])
+      if (!containsKey('rules')) put('rules', rules)
+    }
   }
 }
