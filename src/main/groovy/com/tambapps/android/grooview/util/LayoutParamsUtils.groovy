@@ -34,6 +34,16 @@ final class LayoutParamsUtils {
     def marginBottom = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginBottom') as Integer
     if (marginBottom != null) layoutParams.bottomMargin = marginBottom
 
+    // linear layout properties
+    def weight = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'weight') as Float
+    if (weight != null) {
+      layoutParams.weight = weight
+    }
+    def layoutGravity = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'layoutGravity') as Integer
+    if (layoutGravity != null) {
+      layoutParams.layoutGravity = layoutGravity
+    }
+
     // TODO document relative layout rules
     //  rules are a List<Integer|Map<Integer, Object>, meaning a list of verbs (e.g RelativeLayout.ALIGN_RIGHT)
     //  and/or a mapping between a verb and a view/view id

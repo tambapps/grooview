@@ -110,6 +110,10 @@ abstract class AbstractViewFactory extends AbstractFactory {
       }
     }
 
+    /**
+     * The handled properties are actually in a LayoutParams class
+     * So we should update their keys so that they are handled as LayoutParams properties (see ViewDecorator.addView)
+     */
     private void transformLayoutParamsProperties() {
       transformLayoutParamsProperty('width')
       transformLayoutParamsProperty('height')
@@ -120,7 +124,11 @@ abstract class AbstractViewFactory extends AbstractFactory {
       transformLayoutParamsProperty('marginEnd')
       transformLayoutParamsProperty('marginRight')
       transformLayoutParamsProperty('marginBottom')
+      // RelativeLayout
       transformLayoutParamsProperty('rules')
+      // LinearLayout
+      transformLayoutParamsProperty('weight')
+      transformLayoutParamsProperty('layoutGravity')
     }
 
     private void transformLayoutParamsProperty(String propertyName) {
