@@ -92,7 +92,7 @@ class ViewDecorator {
    * @param view
    */
   void addView(def childView) {
-    _view.addView(childView)
+    invokeMethod('addView', childView)
     LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
   }
 

@@ -233,12 +233,12 @@ class ViewBuilderTest {
   void testRelativeLayoutParamsRules() {
     def result = build {
       view(id: 'view1')
-      view(width: match_parent, rules: [RelativeLayout.CENTER_VERTICAL, [(RelativeLayout.LEFT_OF): view1], [(RelativeLayout.ALIGN_BOTTOM): view1.id]])
+      view(width: match_parent, rules: [RelativeLayout.CENTER_VERTICAL, [(RelativeLayout.ALIGN_BOTTOM): view1.id]])
     }
     assertEquals("View", result.type)
     def rules = result.layoutParams.rules
 
-    assertEquals([RelativeLayout.CENTER_VERTICAL, [(RelativeLayout.LEFT_OF): 0], [(RelativeLayout.ALIGN_BOTTOM): 0]], rules)
+    assertEquals([RelativeLayout.CENTER_VERTICAL, [(RelativeLayout.ALIGN_BOTTOM): 0]], rules)
 
   }
   private def build(Closure closure) {
