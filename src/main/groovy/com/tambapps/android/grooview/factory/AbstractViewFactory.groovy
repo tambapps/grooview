@@ -44,7 +44,10 @@ abstract class AbstractViewFactory extends AbstractFactory {
       }
 
       // handling padding
-      def paddings = (attributes.remove('padding') as List)
+      def paddings = attributes.remove('padding')
+      if (paddings instanceof Number) {
+        paddings = [ paddings ] * 4
+      }
       if (paddings != null) {
         if (paddings.size() != 4) {
           throw new IllegalArgumentException("Padding should have 4 values: left, top, right and bottom")

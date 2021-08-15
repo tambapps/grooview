@@ -18,7 +18,10 @@ final class LayoutParamsUtils {
     }
 
     // margin margin
-    def margins = (attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'margin') as List)
+    def margins = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'margin')
+    if (margins instanceof Number) {
+      margins = [ margins ] * 4
+    }
     if (margins != null) {
       if (margins.size() != 4) {
         throw new IllegalArgumentException("Margin should have 4 values: left, top, right and bottom")
