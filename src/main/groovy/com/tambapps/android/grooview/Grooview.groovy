@@ -2,6 +2,9 @@ package com.tambapps.android.grooview
 
 class Grooview {
 
+  // useful customizable closure to set and use
+  static Closure show
+
   static Object start(Object root, Closure closure) {
     return start(root.context, root, closure)
   }
