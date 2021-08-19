@@ -1,12 +1,6 @@
 package com.tambapps.android.grooview
 
-import com.tambapps.android.grooview.util.ClassEnhancer
-
 class Grooview {
-
-  static {
-    ClassEnhancer.enhanceClasses()
-  }
 
   static Object start(Object root, Closure closure) {
     return start(root.context, root, closure)

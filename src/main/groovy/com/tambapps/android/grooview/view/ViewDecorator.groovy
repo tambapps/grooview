@@ -4,9 +4,13 @@ import android.app.Activity
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import com.tambapps.android.grooview.util.LayoutParamsUtils
 import com.tambapps.android.grooview.util.Utils
+import com.tambapps.android.grooview.util.ViewGroupChildren
+import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
+import org.codehaus.groovy.runtime.typehandling.GroovyCastException
 
 /**
  * Decorator object that will executed underlying view method property calls in UI thread
@@ -156,6 +160,19 @@ class ViewDecorator {
   @Override
   int hashCode() {
     return _view.hashCode()
+  }
+
+  // for viewGroups
+  List getChildren() {
+    return new ViewGroupChildren(_view as ViewGroup)
+  }
+
+  def asType(Class<?> target) {
+    if (View.isAssignableFrom(target)) {
+      return _view
+    } else {
+      throw new GroovyCastException('')
+    }
   }
 
 }

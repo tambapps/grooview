@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.tambapps.android.grooview.util.ClassEnhancer
+
 import com.tambapps.android.grooview.util.FakeViewBuilder
 import com.tambapps.android.grooview.util.FakeView
 import org.junit.jupiter.api.BeforeAll
@@ -32,9 +32,6 @@ class ViewBuilderTest {
     TypedValue.metaClass.static.convert = { new Random().nextInt() }
     Looper.metaClass.static.getMainLooper = {
       return [isCurrentThread: { true }]
-    }
-    ClassEnhancer.metaClass.static.enhanceClasses = { ->
-
     }
   }
 
