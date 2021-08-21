@@ -1,6 +1,7 @@
 package com.tambapps.android.grooviewexample;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,8 @@ import junit.framework.AssertionFailedError;
 import org.codehaus.groovy.runtime.IOGroovyMethods;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -70,7 +73,6 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void runTests(List<Test> tests) {
-
         String initScriptText;
         try {
             initScriptText = IOGroovyMethods.getText(getAssets().open("test_functions.groovy"));
@@ -126,6 +128,7 @@ public class TestActivity extends AppCompatActivity {
         String name;
         String path;
         String message;
+        Throwable error;
         TestState state = TestState.PENDING;
 
         public Test(String fileName) {
@@ -168,6 +171,33 @@ public class TestActivity extends AppCompatActivity {
             holder.nameText.setText(test.name);
             holder.stateText.setText(test.state.name());
             holder.stateText.setTextColor(holder.itemView.getContext().getColor(test.state.color));
+
+            holder.itemView.setOnClickListener((v) -> {
+                if (test.state == TestState.PENDING) {
+                    Toast.makeText(v.getContext(), "Test has not ran yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (test.state == TestState.RUNNING) {
+                    Toast.makeText(v.getContext(), "Test has not finished running yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                switch (test.state) {
+                    case PASSED:
+                        builder.setTitle("Test passed");
+                        break;
+                    case ERROR:
+                    case FAILED:
+                        StringWriter stringWriter = new StringWriter();
+                        PrintWriter writer = new PrintWriter(stringWriter);
+                        test.error.printStackTrace(writer);
+                        builder.setTitle(test.message)
+                                .setMessage(stringWriter.toString());
+                        break;
+                }
+                builder.setNeutralButton("ok", null)
+                        .show();
+            });
         }
 
         @Override
