@@ -6,7 +6,7 @@ import android.util.TypedValue
 class PixelCategory {
 
   // should be initialized by the code using this category
-  static Context context
+  public static Context context
 
   static int getPx(Number number) {
     return convert(number, TypedValue.COMPLEX_UNIT_PX, context)
