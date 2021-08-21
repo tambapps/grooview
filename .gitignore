@@ -28,3 +28,5 @@ volumes/
 /nbdist/
 /.nb-gradle/
 /build/
+
+*.jar

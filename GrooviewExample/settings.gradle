@@ -1,0 +1,2 @@
+rootProject.name = "Grooview Example"
+include ':app'
