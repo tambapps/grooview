@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.tambapps.android.grooview.util.LayoutParamsUtils
 import com.tambapps.android.grooview.util.Utils
 import com.tambapps.android.grooview.util.ViewGroupChildren
-import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.codehaus.groovy.runtime.InvokerHelper
 import org.codehaus.groovy.runtime.typehandling.GroovyCastException
 
@@ -17,10 +16,10 @@ import org.codehaus.groovy.runtime.typehandling.GroovyCastException
  * Properties starting with '_' are treated as additional properties
  */
 class ViewDecorator {
-  private final _view
+  private final View _view
   private final Map additionalProperties = [:]
 
-  ViewDecorator(_view) {
+  ViewDecorator(View _view) {
     this._view = _view
   }
 

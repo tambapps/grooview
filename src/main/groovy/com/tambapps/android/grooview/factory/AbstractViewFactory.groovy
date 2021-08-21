@@ -1,5 +1,8 @@
 package com.tambapps.android.grooview.factory
 
+import android.content.Context
+import android.view.View
+import com.tambapps.android.grooview.ViewBuilder
 import com.tambapps.android.grooview.util.ContextUtils
 import com.tambapps.android.grooview.view.ViewDecorator
 import org.codehaus.groovy.runtime.DefaultGroovyMethods
@@ -7,9 +10,9 @@ import org.codehaus.groovy.runtime.InvokerHelper
 
 abstract class AbstractViewFactory extends AbstractFactory {
 
-  private final Object context
+  private final Context context
 
-  AbstractViewFactory(Object context) {
+  AbstractViewFactory(Context context) {
     this.context = context
   }
 
@@ -24,7 +27,8 @@ abstract class AbstractViewFactory extends AbstractFactory {
   }
 
   @Override
-  boolean onHandleNodeAttributes(FactoryBuilderSupport builder, Object node, Map attributes) {
+  boolean onHandleNodeAttributes(FactoryBuilderSupport factoryBuilderSupport, Object node, Map attributes) {
+    ViewBuilder builder = (ViewBuilder) factoryBuilderSupport
     def setter = new ObjectPropertySetter(builder, node, attributes)
     setter.with {
       def defaultProperties = getDefaultProperties(builder)
@@ -74,8 +78,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
 
   }
 
-  // should return a View but we're using Object type for testing purpose
-  protected abstract Object newInstance(Object context)
+  protected abstract View newInstance(Context context)
 
   @Override
   boolean isLeaf() {
@@ -142,7 +145,7 @@ abstract class AbstractViewFactory extends AbstractFactory {
     }
   }
 
-  protected Map getDefaultProperties(FactoryBuilderSupport builder) {
+  protected Map getDefaultProperties(ViewBuilder builder) {
     return [:]
   }
 }

@@ -1,5 +1,6 @@
 package com.tambapps.android.grooview
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -52,20 +53,23 @@ import java.nio.file.Path
 
 class ViewBuilder extends FactoryBuilderSupport {
 
-  final Object androidContext
-  private final Object root
+  final Context androidContext
+  private final ViewDecorator root
   private final IdMapper idMapper = new IdMapper()
   // map of View class -> default properties (name -> property)
   final Map<Class, Map<String, Object>> defaultViewProperties = [:]
 
-  ViewBuilder(Object root) {
-    this(root.context, root)
+  ViewBuilder(ViewGroup root) {
+    this(root.getContext(), root)
   }
 
-  ViewBuilder(Object androidContext, Object root) {
+  ViewBuilder(Context androidContext, ViewGroup root) {
+    this(androidContext, new ViewDecorator(root))
+  }
+  ViewBuilder(Context androidContext, ViewDecorator root) {
     super(false)
     this.androidContext = androidContext
-    this.root = root instanceof ViewDecorator ? root : new ViewDecorator(root)
+    this.root = root
     initialize()
     autoRegisterNodes()
   }
