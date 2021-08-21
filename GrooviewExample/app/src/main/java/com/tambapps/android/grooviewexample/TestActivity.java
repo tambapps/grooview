@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tambapps.android.grooviewexample.groovy.GrooidShell;
 
 import junit.framework.AssertionFailedError;
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
 public class TestActivity extends AppCompatActivity {
 
     private static final String TESTS_ROOT_PATH = "tests/";
+
+    private FloatingActionButton fab;
 
     private RecyclerView recyclerView;
     private ExecutorService executor;
@@ -70,6 +73,7 @@ public class TestActivity extends AppCompatActivity {
 
         shell.setVariable("context", this);
         shell.setVariable("root", new FrameLayout(this));
+        fab = findViewById(R.id.fab);
     }
 
     public void startTests(View v) {
@@ -83,6 +87,7 @@ public class TestActivity extends AppCompatActivity {
             test.message = null;
         }
         adapter.notifyDataSetChanged();
+        fab.hide();
         future = executor.submit(() -> runTests(tests));
     }
 
@@ -154,6 +159,7 @@ public class TestActivity extends AppCompatActivity {
                 builder.setMessage("All tests passed!");
             }
             builder.show();
+            fab.show();
         });
     }
 

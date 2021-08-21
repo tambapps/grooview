@@ -25,40 +25,41 @@ assertEquals = { Object[] args ->
     }
 }
 assertTrue = { Object[] args ->
-    def resultQueue = new LinkedBlockingQueue<Throwable>()
-    context.runOnUiThread {
-        try {
-            if (args.length == 2) {
-                junit.framework.Assert.assertTrue(args[0] as String, args[1] as Boolean)
-            } else {
-                junit.framework.Assert.assertTrue(args[0] as Boolean)
-            }
-        } catch(AssertionFailedError e) {
-            resultQueue.add(e)
+    assertsCount.incrementAndGet()
+    try {
+        if (args.length == 2) {
+            junit.framework.Assert.assertTrue(args[0] as String, args[1] as Boolean)
+        } else {
+            junit.framework.Assert.assertTrue(args[0] as Boolean)
         }
-    }
-    def error = resultQueue.poll()
-    if (error) {
-        throw error
+    } catch(AssertionFailedError e) {
+        resultQueue.add(e)
     }
 }
 
 assertFalse = { Object[] args ->
-    def resultQueue = new LinkedBlockingQueue<Throwable>()
-    context.runOnUiThread {
-        try {
-            if (args.length == 2) {
-                junit.framework.Assert.assertFalse(args[0] as String, args[1] as Boolean)
-            } else {
-                junit.framework.Assert.assertFalse(args[0] as Boolean)
-            }
-        } catch(AssertionFailedError e) {
-            resultQueue.add(e)
+    assertsCount.incrementAndGet()
+    try {
+        if (args.length == 2) {
+            junit.framework.Assert.assertFalse(args[0] as String, args[1] as Boolean)
+        } else {
+            junit.framework.Assert.assertFalse(args[0] as Boolean)
         }
+    } catch(AssertionFailedError e) {
+        resultQueue.add(e)
     }
-    def error = resultQueue.poll()
-    if (error) {
-        throw error
+}
+
+assertNotNull = { Object[] args ->
+    assertsCount.incrementAndGet()
+    try {
+        if (args.length == 2) {
+            junit.framework.Assert.assertNotNull(args[0] as String, args[1])
+        } else {
+            junit.framework.Assert.assertNotNull(args[0])
+        }
+    } catch(AssertionFailedError e) {
+        resultQueue.add(e)
     }
 }
 
