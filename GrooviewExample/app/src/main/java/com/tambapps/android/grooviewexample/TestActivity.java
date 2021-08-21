@@ -98,6 +98,7 @@ public class TestActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     test.state = TestState.ERROR;
                     test.message = "Couldn't get script: " + e.getMessage();
+                    test.error = e;
                     adapter.notifyItemChanged(position);
                 });
                 continue;
@@ -118,12 +119,14 @@ public class TestActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     test.state = TestState.FAILED;
                     test.message = "Test failed: " + e.getMessage();
+                    test.error = e;
                     adapter.notifyItemChanged(position);
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     test.state = TestState.ERROR;
                     test.message = "An unexpected error occured: " + e.getMessage();
+                    test.error = e;
                     adapter.notifyItemChanged(position);
                 });
             }

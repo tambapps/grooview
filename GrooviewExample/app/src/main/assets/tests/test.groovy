@@ -1,7 +1,7 @@
 import com.tambapps.android.grooview.Grooview
 
 
-def result = Grooview.start(root) {
+def result = build {
     view()
 }
 
