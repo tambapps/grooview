@@ -1,4 +1,5 @@
 import android.widget.TextView
+import com.tambapps.android.grooview.Grooview
 import com.tambapps.android.grooview.ViewBuilder
 
 
@@ -7,7 +8,7 @@ def defaultViewProperties = builder.defaultViewProperties
 def defaultTextViewProperties = [tag: 'youhou']
 defaultViewProperties[TextView] = defaultTextViewProperties
 
-def result = build {
+def result = Grooview.start(builder) {
     textView()
 }
 
