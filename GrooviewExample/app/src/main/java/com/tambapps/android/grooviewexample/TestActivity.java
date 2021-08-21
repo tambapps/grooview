@@ -74,6 +74,7 @@ public class TestActivity extends AppCompatActivity {
     public void startTests(View v) {
         if (future != null && !future.isDone()) {
             Toast.makeText(this, "Tests are still running. Wait for finish to re-run", Toast.LENGTH_SHORT).show();
+            return;
         }
         for (Test test : tests) {
             test.state = TestState.PENDING;
