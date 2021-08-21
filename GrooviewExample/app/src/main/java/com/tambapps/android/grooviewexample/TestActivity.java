@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -138,6 +139,22 @@ public class TestActivity extends AppCompatActivity {
                 });
             }
         }
+        runOnUiThread(() -> {
+            int totalTests = tests.size();
+            int passedTests = (int) tests.stream().filter(t -> t.state == TestState.PASSED).count();
+            AlertDialog.Builder builder = new AlertDialog.Builder(TestActivity.this)
+                    .setTitle("Finished running tests")
+                    .setNeutralButton("ok", null);
+            if (totalTests != passedTests) {
+                int failedTests = totalTests - passedTests;
+                String report = String.format(Locale.US, "%d tests ran\n\n%d tests passed\n%d tests failed", totalTests,
+                        passedTests, failedTests);
+                builder.setMessage(report);
+            } else {
+                builder.setMessage("All tests passed!");
+            }
+            builder.show();
+        });
     }
 
     class Test {
