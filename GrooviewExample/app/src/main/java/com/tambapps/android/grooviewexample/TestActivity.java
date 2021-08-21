@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class TestActivity extends AppCompatActivity {
@@ -38,6 +39,8 @@ public class TestActivity extends AppCompatActivity {
     private List<Test> tests;
     private MyAdapter adapter;
     private GrooidShell shell;
+    private Future<?> future;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,10 @@ public class TestActivity extends AppCompatActivity {
     }
 
     public void startTests(View v) {
-        executor.submit(() -> runTests(tests));
+        if (future != null && !future.isDone()) {
+            Toast.makeText(this, "Tests are still running. Wait for finish to re-run", Toast.LENGTH_SHORT).show();
+        }
+        future = executor.submit(() -> runTests(tests));
     }
 
     private void runTests(List<Test> tests) {
