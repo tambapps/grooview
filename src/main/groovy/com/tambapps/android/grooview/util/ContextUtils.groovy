@@ -4,7 +4,9 @@ import android.R
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class ContextUtils {
 
   static Drawable rippleDrawable(Context context) {
