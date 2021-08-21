@@ -34,7 +34,7 @@ class Grooview {
   }
 
   static Object start(ViewBuilder viewBuilder, Closure closure) {
-    PixelsCategory.context = viewBuilder.androidContext
+    PixelCategory.context = viewBuilder.androidContext
     closure.setDelegate(viewBuilder)
     closure.setResolveStrategy(Closure.DELEGATE_FIRST)
     return closure()

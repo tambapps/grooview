@@ -1,11 +1,12 @@
 package com.tambapps.android.grooview
 
+import android.content.Context
 import android.util.TypedValue
 
-class PixelsCategory {
+class PixelCategory {
 
   // should be initialized by the code using this category
-  static Object context
+  static Context context
 
   static int getPx(Number number) {
     return convert(number, TypedValue.COMPLEX_UNIT_PX, context)
