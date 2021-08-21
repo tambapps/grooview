@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GrooviewExample">
-        <activity android:name=".TestActivity"></activity>
+        <activity
+            android:name=".TestActivity"
+            android:label="Unit Tests"
+            />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
