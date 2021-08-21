@@ -47,6 +47,10 @@ class ViewDecorator {
     }
   }
 
+  View get_View() {
+    return _view
+  }
+
   def getProperty(String name) {
     if (name == '_view') {
       return _view
@@ -54,6 +58,8 @@ class ViewDecorator {
       return additionalProperties[name]
     } else if (name == 'additionalProperties') {
       return additionalProperties
+    }  else if (name == 'children') {
+      return getChildren()
     }
     def value = InvokerHelper.getProperty(_view, name)
     return value instanceof View ? new ViewDecorator(value) : value

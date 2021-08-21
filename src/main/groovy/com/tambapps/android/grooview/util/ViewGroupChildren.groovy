@@ -26,7 +26,7 @@ class ViewGroupChildren extends AbstractList<ViewDecorator> {
 
   @Override
   boolean add(ViewDecorator viewDecorator) {
-    return add(viewDecorator as View)
+    return add(viewDecorator.get_View())
   }
 
   void add(int index, View element) {
@@ -35,7 +35,7 @@ class ViewGroupChildren extends AbstractList<ViewDecorator> {
 
   @Override
   void add(int index, ViewDecorator element) {
-    add(index, element as View)
+    add(index, element.get_View())
   }
 
   boolean addAllViews(Collection<? extends View> c) {
@@ -82,7 +82,7 @@ class ViewGroupChildren extends AbstractList<ViewDecorator> {
 
   @Override
   ViewDecorator set(int index, ViewDecorator element) {
-    viewGroup.addView(element as View, index)
+    viewGroup.addView(element.get_View(), index)
     def view = get(index + 1)
     viewGroup.removeViewAt(index + 1)
     return view

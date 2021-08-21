@@ -6,9 +6,6 @@ import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
-import android.widget.AbsSeekBar
-import android.widget.AbsSpinner
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.CalendarView
