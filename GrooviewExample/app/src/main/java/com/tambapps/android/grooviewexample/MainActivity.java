@@ -24,6 +24,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import org.codehaus.groovy.runtime.IOGroovyMethods;
+import org.codehaus.groovy.runtime.ResourceGroovyMethods;
+
+import java.io.File;
+
 import groovy.lang.Closure;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        File classesDir = getDir("dynclasses", 0);
+        ResourceGroovyMethods.deleteDir(classesDir);
+        super.onDestroy();
     }
 
     @Override
