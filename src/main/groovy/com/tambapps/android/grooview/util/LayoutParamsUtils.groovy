@@ -8,19 +8,18 @@ final class LayoutParamsUtils {
 
   static final String LAYOUT_PARAMS_ATTRIBUTE_PREFIX = "layoutParams_"
 
-  // TODO construct a map by removing LAYOUT_PARAMS_ATTRIBUTE_PREFIX prefix (should simplify code)
   static void handleLayoutParamsProperties(def layoutParams, Map attributes) {
-    def width = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'width') as Integer
+    def width = attributes.remove('width') as Integer
     if (width != null) {
       layoutParams.width = width
     }
-    def height = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'height') as Integer
+    def height = attributes.remove('height') as Integer
     if (height != null) {
       layoutParams.height = height
     }
 
     // margin margin
-    def margins = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'margin')
+    def margins = attributes.remove('margin')
     if (margins instanceof Number) {
       margins = [ margins ] * 4
     }
@@ -30,21 +29,21 @@ final class LayoutParamsUtils {
       }
       layoutParams.setMargins(*(margins.collect {it as int}))
     }
-    def marginStart = (attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginStart') ?: attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginLeft')) as Integer
+    def marginStart = (attributes.remove('marginStart') ?: attributes.remove('marginLeft')) as Integer
     if (marginStart != null) layoutParams.leftMargin = marginStart
-    def marginTop = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginTop') as Integer
+    def marginTop = attributes.remove('marginTop') as Integer
     if (marginTop != null) layoutParams.topMargin = marginTop
-    def marginEnd = (attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginEnd') ?: attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginRight')) as Integer
+    def marginEnd = (attributes.remove('marginEnd') ?: attributes.remove('marginRight')) as Integer
     if (marginEnd != null) layoutParams.rightMargin = marginEnd
-    def marginBottom = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'marginBottom') as Integer
+    def marginBottom = attributes.remove('marginBottom') as Integer
     if (marginBottom != null) layoutParams.bottomMargin = marginBottom
 
     // linear layout properties
-    def weight = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'weight') as Float
+    def weight = attributes.remove('weight') as Float
     if (weight != null) {
       layoutParams.weight = weight
     }
-    def layoutGravity = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'layoutGravity') as Integer
+    def layoutGravity = attributes.remove('layoutGravity') as Integer
     if (layoutGravity != null) {
       layoutParams.layoutGravity = layoutGravity
     }
@@ -61,7 +60,7 @@ final class LayoutParamsUtils {
     // TODO document relative layout rules
     //  rules are a List<Integer|Map<Integer, Object>, meaning a list of verbs (e.g RelativeLayout.ALIGN_RIGHT)
     //  and/or a mapping between a verb and a view/view id
-    def rules = attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'rules')
+    def rules = attributes.remove('rules')
     for (rule in rules) {
       if (rule instanceof Map) {
         for (subjectedRule in rule) {
@@ -76,7 +75,7 @@ final class LayoutParamsUtils {
     // TODO document this also
     // TODO test this
     // or you can enter rules as view properties
-    if (attributes.remove(LAYOUT_PARAMS_ATTRIBUTE_PREFIX + 'centerInParent')) {
+    if (attributes.remove('centerInParent')) {
       layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT)
     }
     if (attributes.remove('alignParentStart') || attributes.remove('alignParentLeft')) {
@@ -91,6 +90,24 @@ final class LayoutParamsUtils {
     if (attributes.remove('alignParentBottom')) {
       layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
     }
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'alignStart', RelativeLayout.ALIGN_START)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'alignLeft', RelativeLayout.ALIGN_START)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'alignTop', RelativeLayout.ALIGN_TOP)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'alignEnd', RelativeLayout.ALIGN_END)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'alignRight', RelativeLayout.ALIGN_RIGHT)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'alignBottom', RelativeLayout.ALIGN_BOTTOM)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'centerHorizontal', RelativeLayout.CENTER_HORIZONTAL)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'centerVertical', RelativeLayout.CENTER_VERTICAL)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'startOf', RelativeLayout.START_OF)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'leftOf', RelativeLayout.LEFT_OF)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'endOf', RelativeLayout.END_OF)
+    handleRelativeLayoutParamRule(layoutParams, attributes, 'rightOf', RelativeLayout.RIGHT_OF)
+  }
 
+  private static void handleRelativeLayoutParamRule(RelativeLayout.LayoutParams layoutParams, Map attributes, String name, int rule) {
+    def viewId = attributes.remove(name)
+    if (viewId != null && viewId instanceof Integer) {
+      layoutParams.addRule(rule, viewId)
+    }
   }
 }

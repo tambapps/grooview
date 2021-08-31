@@ -101,10 +101,21 @@ class ViewDecorator {
    * @param view
    */
   void addView(def childView) {
+    // first construct layout params
+    Map childViewAdditionalProperties = childView.additionalProperties
+    Map childViewLayoutParamAttributes = [:]
+    def entryIterator = childViewAdditionalProperties.entrySet().iterator()
+    while (entryIterator.hasNext()) {
+      def entry = entryIterator.next()
+      if (entry.key.toString().startsWith(LayoutParamsUtils.LAYOUT_PARAMS_ATTRIBUTE_PREFIX)) {
+        childViewLayoutParamAttributes[entry.key.toString().substring(LayoutParamsUtils.LAYOUT_PARAMS_ATTRIBUTE_PREFIX.size())] = entry.value
+        entryIterator.remove()
+      }
+    }
     if (Looper.getMainLooper().isCurrentThread()) {
       try {
         _view.addView(childView._view)
-        LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
+        LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childViewLayoutParamAttributes)
       } catch (Exception e) {
         // ignore IntelIJ warning. THIS IS IMPORTANT for differentiating static method call from
         ViewDecorator.errorDialog(_view, e)
@@ -113,7 +124,7 @@ class ViewDecorator {
       ((Activity) _view.context).runOnUiThread {
         try {
           _view.addView(childView._view)
-          LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childView.additionalProperties)
+          LayoutParamsUtils.handleLayoutParamsProperties(childView.layoutParams, childViewLayoutParamAttributes)
         } catch(Exception e) {
           // ignore IntelIJ warning
           ViewDecorator.errorDialog(_view, e)

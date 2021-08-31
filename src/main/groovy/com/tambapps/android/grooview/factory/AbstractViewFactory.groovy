@@ -121,7 +121,6 @@ abstract class AbstractViewFactory extends AbstractFactory {
      * So we should update their keys so that they are handled as LayoutParams properties (see ViewDecorator.addView)
      */
     private void transformLayoutParamsProperties() {
-      // TODO handle all this in smart set property
       transformLayoutParamsProperty('width')
       transformLayoutParamsProperty('height')
       transformLayoutParamsProperty('margin')
@@ -131,12 +130,30 @@ abstract class AbstractViewFactory extends AbstractFactory {
       transformLayoutParamsProperty('marginEnd')
       transformLayoutParamsProperty('marginRight')
       transformLayoutParamsProperty('marginBottom')
-      // RelativeLayout
-      transformLayoutParamsProperty('rules')
       // LinearLayout
       transformLayoutParamsProperty('weight')
       transformLayoutParamsProperty('layoutGravity')
+      // RelativeLayout
+      transformLayoutParamsProperty('rules')
       transformLayoutParamsProperty('centerInParent')
+      transformLayoutParamsProperty('alignParentStart')
+      transformLayoutParamsProperty('alignParentLeft')
+      transformLayoutParamsProperty('alignParentTop')
+      transformLayoutParamsProperty('alignParentEnd')
+      transformLayoutParamsProperty('alignParentRight')
+      transformLayoutParamsProperty('alignParentBottom')
+      transformLayoutParamsProperty('alignStart')
+      transformLayoutParamsProperty('alignLeft')
+      transformLayoutParamsProperty('alignTop')
+      transformLayoutParamsProperty('alignEnd')
+      transformLayoutParamsProperty('alignRight')
+      transformLayoutParamsProperty('alignBottom')
+      transformLayoutParamsProperty('centerHorizontal')
+      transformLayoutParamsProperty('centerVertical')
+      transformLayoutParamsProperty('startOf')
+      transformLayoutParamsProperty('leftOf')
+      transformLayoutParamsProperty('endOf')
+      transformLayoutParamsProperty('rightOf')
     }
 
     private void transformLayoutParamsProperty(String propertyName) {
