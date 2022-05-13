@@ -1,13 +1,19 @@
 package com.tambapps.android.grooview
 
-import android.content.Context
-import android.util.TypedValue
+import android.content.res.Resources
 
 class PixelCategory {
 
   // should be initialized by the code using this category
-  public static Context context
 
+  /* TODO use the below code, that doesn't require context
+  // dp to px
+val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+val Float.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+// sp to px
+val Int.sp: Int get() = (this * Resources.getSystem().displayMetrics.scaledDensity).toInt()
+val Float.sp: Int get() = (this * Resources.getSystem().displayMetrics.scaledDensity).toInt()
+   */
   static int getPx(Number number) {
     return convert(number, TypedValue.COMPLEX_UNIT_PX, context)
   }
