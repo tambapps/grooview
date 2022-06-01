@@ -36,7 +36,9 @@ class Grooview {
   static Object start(ViewBuilder viewBuilder, Closure closure) {
     closure.setDelegate(viewBuilder)
     closure.setResolveStrategy(Closure.DELEGATE_FIRST)
-    return closure()
+    use(PixelCategory) {
+      return closure()
+    }
   }
 
 }
