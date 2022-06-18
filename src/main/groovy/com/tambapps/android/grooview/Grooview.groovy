@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.tambapps.android.grooview.view.ViewDecorator
 import groovy.transform.CompileStatic
 
-@CompileStatic
+
 class Grooview {
 
   // useful customizable closure to set and use
